@@ -1,6 +1,5 @@
 package ru.sergr972.restaurantvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,36 +7,32 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
-import ru.sergr972.restaurantvoting.validation.NoHtml;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "dish")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Dish extends NamedEntity{
+public class Dish extends NamedEntity {
 
     @Column(name = "price", nullable = false)
-    @Range(min = 100, max = 100_000_00)
-    private Integer price;
+    @Range(min = 1, max = 100000)
+    private int price;
+
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id", nullable = false)
+    @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Menu menu;
+    private Restaurant restaurant;
 
-    public Dish(Integer id, String name, Integer price) {
+    public Dish(Integer id, String name, Restaurant restaurant, int price, LocalDate date) {
         super(id, name);
+        this.restaurant = restaurant;
         this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Dish{" +
-                "price=" + price +
-                ", menu=" + menu +
-                ", name='" + name + '\'' +
-                ", id=" + id +
-                '}';
+        this.date = date;
     }
 }
