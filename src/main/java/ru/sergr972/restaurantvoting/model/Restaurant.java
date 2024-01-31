@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "restaurant")
@@ -15,11 +15,10 @@ import java.util.List;
 @Setter
 public class Restaurant extends NamedEntity {
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant")
     @OrderBy("date DESC")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference
-    private List<Menu> menu;
+    private Set<Menu> menu;
 
     public Restaurant() {
     }

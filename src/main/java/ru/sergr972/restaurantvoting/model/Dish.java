@@ -19,13 +19,11 @@ public class Dish extends NamedEntity{
 
     @Column(name = "price", nullable = false)
     @Range(min = 100, max = 100_000_00)
-    @NoHtml
     private Integer price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
     private Menu menu;
 
     public Dish(Integer id, String name, Integer price) {

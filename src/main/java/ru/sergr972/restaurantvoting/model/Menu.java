@@ -22,15 +22,13 @@ public class Menu extends BaseEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDate date;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+    @OneToMany(mappedBy = "menu")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference
     private Set<Dish> dishSet;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "restaurant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
     private Restaurant restaurant;
 
     public Menu() {
