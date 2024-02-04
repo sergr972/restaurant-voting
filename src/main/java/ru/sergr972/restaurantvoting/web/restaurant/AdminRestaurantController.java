@@ -2,6 +2,7 @@ package ru.sergr972.restaurantvoting.web.restaurant;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,13 +27,13 @@ public class AdminRestaurantController {
 
     protected final RestaurantRepository repository;
 
-    public AdminRestaurantController(RestaurantRepository repository) {
+    public AdminRestaurantController(@Autowired RestaurantRepository repository) {
         this.repository = repository;
     }
 
     @GetMapping
     public List<Restaurant> getAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("/{id}")
@@ -47,7 +48,6 @@ public class AdminRestaurantController {
         log.info("delete {}", id);
         repository.deleteExisted(id);
     }
-
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
