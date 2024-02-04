@@ -30,8 +30,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT_ID)
-                .with(userHttpBasic(admin)))
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + RESTAURANT_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -45,7 +44,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(admin)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(r1, r2, r3,  r4));
+                .andExpect(RESTAURANT_MATCHER.contentJson(r1, r2, r3, r4));
     }
 
     @Test

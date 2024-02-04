@@ -29,7 +29,13 @@ public class Dish extends NamedEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    public Dish(Integer id, String name, Restaurant restaurant, int price, LocalDate date) {
+    public Dish(Integer id, String name, LocalDate date, int price) {
+        super(id, name);
+        this.date = date;
+        this.price = price;
+    }
+
+    public Dish(Integer id, String name, LocalDate date, int price, Restaurant restaurant) {
         super(id, name);
         this.restaurant = restaurant;
         this.price = price;

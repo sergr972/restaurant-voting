@@ -32,11 +32,13 @@ public class AdminRestaurantController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Restaurant> getAll() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Restaurant get(@PathVariable int id) {
         log.info("get {}", id);
         return repository.getExisted(id);

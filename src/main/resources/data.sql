@@ -15,12 +15,18 @@ VALUES ('ROSTIKS'),
        ('TOKIO');
 
 INSERT INTO DISH(date, restaurant_id, price, name)
-VALUES (CURRENT_DATE, 1, 150, 'Dish1'),
+VALUES ('2024-01-31', 1, 150, 'Dish1'),
        (CURRENT_DATE, 1, 250, 'Dish2'),
-       (CURRENT_DATE, 2, 350, 'Dish1'),
-       (CURRENT_DATE, 2, 450, 'Dish2'),
+       (CURRENT_DATE, 1, 350, 'Dish3'),
+       ('2024-01-29', 2, 150, 'Dish1'),
+       (CURRENT_DATE, 2, 250, 'Dish2'),
+       (CURRENT_DATE, 2, 350, 'Dish3'),
+       ('2024-01-30', 3, 350, 'Dish1'),
+       (CURRENT_DATE, 3, 450, 'Dish2'),
        (CURRENT_DATE, 3, 550, 'Dish3'),
-       (CURRENT_DATE, 4, 650, 'Dish4');
+       ('2024-01-28', 4, 250, 'Dish1'),
+       (CURRENT_DATE, 4, 450, 'Dish2'),
+       (CURRENT_DATE, 4, 650, 'Dish3');
 
 
 INSERT INTO vote (vote_date, user_id, restaurant_id)
