@@ -24,39 +24,40 @@ import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
 @Slf4j
 public class AdminDishController {
 
-    static final String REST_URL = "/api/admin/restaurant/{restaurantId}/menu";
+    static final String REST_URL = "/api/admin/restaurant/{restaurantId}/dish";
 
     protected DishRepository dishRepository;
     protected RestaurantRepository restaurantRepository;
 
-    public AdminDishController(@Autowired DishRepository dishRepository, @Autowired RestaurantRepository restaurantRepository) {
+    @Autowired
+    public AdminDishController(DishRepository dishRepository, RestaurantRepository restaurantRepository) {
         this.dishRepository = dishRepository;
         this.restaurantRepository = restaurantRepository;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Dish> getMenu(@PathVariable int restaurantId) {
+    public List<Dish> getAllDishesForRestaurant(@PathVariable int restaurantId) {
         log.info("get all Dish for restaurant {}", restaurantId);
         return dishRepository.findAllForRestaurant(restaurantId);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Dish getDishMenu(@PathVariable int id, @PathVariable String restaurantId) {
+    public Dish getDishesById(@PathVariable int id, @PathVariable String restaurantId) {
         log.info("get Dish with id={} in menu for Restaurant with id={}", id, restaurantId);
         return dishRepository.getExisted(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteDishFromMenu(@PathVariable int id, @PathVariable String restaurantId) {
+    public void deleteDishesById(@PathVariable int id, @PathVariable String restaurantId) {
         log.info("delete Dish with id={} for Restaurant id={}", id, restaurantId);
         dishRepository.deleteExisted(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createDish(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
+    public ResponseEntity<Dish> createDishes(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
         log.info("create Dish {} in Restaurant id={}", dish, restaurantId);
         checkNew(dish);
         Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
@@ -71,7 +72,7 @@ public class AdminDishController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateDish(@Valid @RequestBody Dish dish, @PathVariable int id, @PathVariable int restaurantId) {
+    public void updateDishes(@Valid @RequestBody Dish dish, @PathVariable int id, @PathVariable int restaurantId) {
         log.info("update Dish {} with id={} restaurant id={}", dish, id, restaurantId);
         assureIdConsistent(dish, id);
         dishRepository.save(dish);

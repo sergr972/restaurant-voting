@@ -3,12 +3,12 @@ package ru.sergr972.restaurantvoting.web.restaurant;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.sergr972.restaurantvoting.error.NotFoundException;
 import ru.sergr972.restaurantvoting.model.Restaurant;
 import ru.sergr972.restaurantvoting.repository.RestaurantRepository;
 
@@ -27,14 +27,16 @@ public class AdminRestaurantController {
 
     protected final RestaurantRepository repository;
 
-    public AdminRestaurantController(@Autowired RestaurantRepository repository) {
+    @Autowired
+    public AdminRestaurantController(RestaurantRepository repository) {
         this.repository = repository;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Restaurant> getAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    public List<Restaurant> getAllWithDishes() {
+        return repository.findAllRestaurantsWithMenu()
+                .orElseThrow(() -> new NotFoundException("not found"));
     }
 
     @GetMapping("/{id}")

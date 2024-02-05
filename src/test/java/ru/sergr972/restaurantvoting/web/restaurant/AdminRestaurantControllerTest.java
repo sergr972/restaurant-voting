@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.sergr972.restaurantvoting.TestUtil.userHttpBasic;
 import static ru.sergr972.restaurantvoting.web.restaurant.AdminRestaurantController.REST_URL;
 import static ru.sergr972.restaurantvoting.web.restaurant.RestaurantTestData.*;
-import static ru.sergr972.restaurantvoting.web.user.UserTestData.*;
+import static ru.sergr972.restaurantvoting.web.user.UserTestData.ADMIN_MAIL;
+import static ru.sergr972.restaurantvoting.web.user.UserTestData.NOT_FOUND;
 
 class AdminRestaurantControllerTest extends AbstractControllerTest {
 
@@ -40,8 +40,16 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL)
-                .with(userHttpBasic(admin)))
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(r1, r2, r3, r4));
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void getAllWithDishes() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_MATCHER.contentJson(r1, r2, r3, r4));

@@ -20,7 +20,7 @@ import static ru.sergr972.restaurantvoting.web.user.UserTestData.ADMIN_MAIL;
 
 class AdminDishControllerTest extends AbstractControllerTest {
 
-    public static final String REST_URL_MENU = "/api/admin/restaurant/1/menu";
+    public static final String REST_URL_MENU = "/api/admin/restaurant/1/dish";
     private static final String REST_URL_MENU_SLASH = REST_URL_MENU + '/';
 
     @Autowired
@@ -28,7 +28,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getMenu() throws Exception {
+    void getAllDishesForRestaurant() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_MENU))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -38,7 +38,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getDishMenu() throws Exception {
+    void getDishesById() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_MENU_SLASH + DISH_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -48,7 +48,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void deleteDishFromMenu() throws Exception {
+    void deleteDishesById() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL_MENU_SLASH + DISH_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
@@ -57,7 +57,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void createDish() throws Exception {
+    void createDishes() throws Exception {
         Dish newDish = getNewDish();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_MENU)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void updateDish() throws Exception {
+    void updateDishes() throws Exception {
         Dish updated = getUpdatedDish();
         updated.setId(null);
         perform(MockMvcRequestBuilders.put(REST_URL_MENU_SLASH + DISH_ID)
