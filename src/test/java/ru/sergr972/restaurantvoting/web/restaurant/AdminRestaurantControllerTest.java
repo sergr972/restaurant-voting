@@ -34,7 +34,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(r1));
+                .andExpect(RESTAURANT_MATCHER.contentJson(R_1));
     }
 
     @Test
@@ -43,16 +43,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(r1, r2, r3, r4));
-    }
-
-    @Test
-    @WithUserDetails(value = ADMIN_MAIL)
-    void getAllWithDishes() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(r1, r2, r3, r4));
+                .andExpect(RESTAURANT_MATCHER.contentJson(R_1, R_2, R_3, R_4));
     }
 
     @Test

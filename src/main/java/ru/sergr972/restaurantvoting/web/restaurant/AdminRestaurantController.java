@@ -34,8 +34,8 @@ public class AdminRestaurantController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Restaurant> getAllWithDishes() {
-        return repository.findAllRestaurantsWithMenu()
+    public List<Restaurant> getAll() {
+        return repository.getAllRestaurantsWithDishes()
                 .orElseThrow(() -> new NotFoundException("not found"));
     }
 
@@ -43,7 +43,8 @@ public class AdminRestaurantController {
     @ResponseStatus(HttpStatus.OK)
     public Restaurant get(@PathVariable int id) {
         log.info("get {}", id);
-        return repository.getExisted(id);
+        return repository.getRestaurantWithDishesById(id)
+                .orElseThrow(() -> new NotFoundException("not found"));
     }
 
     @DeleteMapping("/{id}")
