@@ -25,9 +25,9 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
     @Query("SELECT r FROM Restaurant r JOIN FETCH r.menu WHERE r.id=:id")
     Optional<Restaurant> getRestaurantWithDishesById(int id);
 
-    @Query("SELECT DISTINCT r FROM Restaurant r JOIN FETCH r.menu d WHERE d.date =?1 ORDER BY r.id ASC")
+    @Query("SELECT DISTINCT r FROM Restaurant r JOIN FETCH r.menu d WHERE d.date =:date ORDER BY r.id ASC")
     Optional<List<Restaurant>> findAllRestaurantWithMenuDay(LocalDate date);
 
-    @Query("SELECT r FROM Restaurant r  JOIN FETCH r.menu d WHERE r.id=?1 AND d.date =?2")
+    @Query("SELECT r FROM Restaurant r  JOIN FETCH r.menu d WHERE r.id=:id AND d.date =:date")
     Optional<Restaurant> getWithMenuDay(int id, LocalDate date);
 }
