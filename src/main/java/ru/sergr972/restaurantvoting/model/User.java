@@ -1,5 +1,6 @@
 package ru.sergr972.restaurantvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -11,8 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.NonNull;
-import ru.sergr972.restaurantvoting.validation.NoHtml;
 import ru.sergr972.restaurantvoting.HasIdAndEmail;
+import ru.sergr972.restaurantvoting.validation.NoHtml;
 
 import java.util.*;
 
@@ -22,7 +23,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends NamedEntity implements HasIdAndEmail {
-// No session, no needs Serializable
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
@@ -44,6 +44,7 @@ public class User extends NamedEntity implements HasIdAndEmail {
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date registered = new Date();
 
     @Enumerated(EnumType.STRING)
@@ -54,12 +55,20 @@ public class User extends NamedEntity implements HasIdAndEmail {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles = EnumSet.noneOf(Role.class);
 
+    @OneToMany(mappedBy = "user")
+    private Set<Vote> votes;
+
     public User(User u) {
         this(u.id, u.name, u.email, u.password, u.enabled, u.registered, u.roles);
     }
 
     public User(Integer id, String name, String email, String password, Role... roles) {
         this(id, name, email, password, true, new Date(), Arrays.asList(roles));
+    }
+
+    public User(Integer id, String name, Set<Vote> votes) {
+        super(id, name);
+        this.votes = votes;
     }
 
     public User(Integer id, String name, String email, String password, boolean enabled, Date registered, @NonNull Collection<Role> roles) {
