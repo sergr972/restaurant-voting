@@ -7,6 +7,7 @@ import ru.sergr972.restaurantvoting.model.Vote;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
@@ -18,7 +19,7 @@ public interface VoteRepository extends BaseRepository<Vote> {
             "JOIN FETCH r.menu m " +
             "WHERE m.date = v.voteDate AND v.user.id=:userId " +
             "ORDER BY v.voteDate ASC ")
-    List<Vote> findAllVotesByUser(int userId);
+    Optional<List<Vote>> findAllVotesByUser(int userId);
 
     @Query("SELECT v FROM Vote v " +
             "JOIN FETCH v.restaurant r " +
@@ -26,5 +27,5 @@ public interface VoteRepository extends BaseRepository<Vote> {
             "JOIN FETCH v.user " +
             "WHERE v.voteDate = :date AND m.date=:date " +
             "ORDER BY r.id ASC ")
-    List<Vote> findAllVotesByToDay(LocalDate date);
+    Optional<List<Vote>> findAllVotesByToDay(LocalDate date);
 }

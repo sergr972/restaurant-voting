@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import ru.sergr972.restaurantvoting.error.NotFoundException;
 import ru.sergr972.restaurantvoting.model.Vote;
 import ru.sergr972.restaurantvoting.repository.VoteRepository;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class VoteController {
 
-    static final String REST_URL = "/api/profile";
+    static final String REST_URL = "/api/votes";
 
     private final VoteRepository repository;
 
@@ -25,17 +26,19 @@ public class VoteController {
         this.repository = repository;
     }
 
-    @GetMapping("/users/{userId}/votes")
+    @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public List<Vote> getAllVotesForUser(@PathVariable int userId) {
         log.info("get all Vote for User {}", userId);
-        return repository.findAllVotesByUser(userId);
+        return repository.findAllVotesByUser(userId)
+                .orElseThrow(() -> new NotFoundException("not found"));
     }
 
-    @GetMapping("/users/votes")
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<Vote> getAllVotesByDate() {
         log.info("get all Vote for ALL Users");
-        return repository.findAllVotesByToDay(LocalDate.now());
+        return repository.findAllVotesByToDay(LocalDate.now())
+                .orElseThrow(() -> new NotFoundException("not found"));
     }
 }
