@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.sergr972.restaurantvoting.error.NotFoundException;
 import ru.sergr972.restaurantvoting.model.Vote;
 import ru.sergr972.restaurantvoting.repository.VoteRepository;
 
@@ -26,33 +25,17 @@ public class VoteController {
         this.repository = repository;
     }
 
-    @GetMapping("/users/votes")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Vote> getAllVotesByDate() {
-        log.info("get all Vote for ALL Users");
-        return repository.findAllVotesByToDay(LocalDate.now())
-                .orElseThrow(() -> new NotFoundException("not found"));
-    }
-
     @GetMapping("/users/{userId}/votes")
     @ResponseStatus(HttpStatus.OK)
     public List<Vote> getAllVotesForUser(@PathVariable int userId) {
         log.info("get all Vote for User {}", userId);
-        return repository.findAllVotesUser(userId);
+        return repository.findAllVotesByUser(userId);
     }
 
-    @GetMapping("/restaurant/{restaurantId}/votes")
+    @GetMapping("/users/votes")
     @ResponseStatus(HttpStatus.OK)
-    public List<Vote> getAllVotesForRestaurant(@PathVariable int restaurantId) {
-        log.info("get all Vote for Restaurant {}", restaurantId);
-        return repository.findAllVotesRestaurant(restaurantId);
-    }
-
-    @GetMapping("/restaurant/votes")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Vote> getAllVotesForALLRestaurantByToDay() {
-        log.info("get all Vote for ALL Restaurant");
-        return repository.findAllVotesForAllRestaurantByToDay(LocalDate.now())
-                .orElseThrow(() -> new NotFoundException("not found"));
+    public List<Vote> getAllVotesByDate() {
+        log.info("get all Vote for ALL Users");
+        return repository.findAllVotesByToDay(LocalDate.now());
     }
 }

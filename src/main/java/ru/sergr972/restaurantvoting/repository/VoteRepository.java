@@ -7,21 +7,24 @@ import ru.sergr972.restaurantvoting.model.Vote;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
 public interface VoteRepository extends BaseRepository<Vote> {
 
-    @Query("SELECT DISTINCT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.voteDate ASC ")
-    List<Vote> findAllVotesUser(int userId);
+    @Query("SELECT DISTINCT v FROM Vote v " +
+            "JOIN FETCH v.user " +
+            "JOIN FETCH v.restaurant r " +
+            "JOIN FETCH r.menu m " +
+            "WHERE m.date = v.voteDate AND v.user.id=:userId " +
+            "ORDER BY v.voteDate ASC ")
+    List<Vote> findAllVotesByUser(int userId);
 
-    @Query("FROM Vote v WHERE v.voteDate=:date")
-    Optional<List<Vote>> findAllVotesByToDay(LocalDate date);
-
-    @Query("SELECT DISTINCT v FROM Vote v WHERE v.restaurant.id=:restaurantId ORDER BY v.voteDate ASC ")
-    List<Vote> findAllVotesRestaurant(int restaurantId);
-
-    @Query("FROM Vote v WHERE v.voteDate=:date")
-    Optional<List<Vote>> findAllVotesForAllRestaurantByToDay(LocalDate date);
+    @Query("SELECT v FROM Vote v " +
+            "JOIN FETCH v.restaurant r " +
+            "JOIN FETCH r.menu m " +
+            "JOIN FETCH v.user " +
+            "WHERE v.voteDate = :date AND m.date=:date " +
+            "ORDER BY r.id ASC ")
+    List<Vote> findAllVotesByToDay(LocalDate date);
 }
