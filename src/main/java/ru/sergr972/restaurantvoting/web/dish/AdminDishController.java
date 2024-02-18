@@ -24,7 +24,7 @@ import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
 @Slf4j
 public class AdminDishController {
 
-    static final String REST_URL = "/api/admin/restaurant/{restaurantId}/dish";
+    static final String REST_URL = "/api/admin/restaurants/{restaurantId}/dishes";
 
     protected DishRepository dishRepository;
     protected RestaurantRepository restaurantRepository;
