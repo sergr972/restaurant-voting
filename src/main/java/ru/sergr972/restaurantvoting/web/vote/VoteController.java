@@ -9,8 +9,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.sergr972.restaurantvoting.error.NotFoundException;
+import ru.sergr972.restaurantvoting.error.VoteException;
 import ru.sergr972.restaurantvoting.model.Restaurant;
-import ru.sergr972.restaurantvoting.model.User;
 import ru.sergr972.restaurantvoting.model.Vote;
 import ru.sergr972.restaurantvoting.repository.RestaurantRepository;
 import ru.sergr972.restaurantvoting.repository.VoteRepository;
@@ -18,10 +18,10 @@ import ru.sergr972.restaurantvoting.web.AuthUser;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-
-import static ru.sergr972.restaurantvoting.web.RestValidation.assureIdConsistent;
 
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,28 +58,30 @@ public class VoteController {
     @PostMapping("/{restaurantId}")
     public ResponseEntity<Vote> create(@PathVariable int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create or update UserVote {}", authUser);
-        LocalDate localDate = LocalDate.now();
+        LocalDate localDate = LocalDateTime.now().toLocalDate();
+        LocalTime localTime = LocalDateTime.now().toLocalTime();
+        LocalTime endOfVote = LocalTime.of(11, 0);
 
-        int userId = authUser.id();
-        User user = authUser.getUser();
-        assureIdConsistent(user, userId);
         Restaurant restaurant = restaurantRepository.getExisted(restaurantId);
-        assureIdConsistent(restaurant, restaurantId);
-        Optional<Vote> currentVoteByUsers = voteRepository.getVoteByUserAndVoteDate(user, localDate);
+        Optional<Vote> currentVoteByUsers = voteRepository.getVoteByUserAndVoteDate(authUser.getUser(), localDate);
         Vote newVote;
 
-        if (currentVoteByUsers.isEmpty()) {
-            newVote = new Vote(user, localDate, restaurant);
-        } else {
-            newVote = currentVoteByUsers.get();
-            newVote.setRestaurant(restaurant);
-            newVote.setVoteDate(LocalDate.now());
-        }
+        if (localTime.isBefore(endOfVote)) {
+            if (currentVoteByUsers.isEmpty()) {
+                newVote = new Vote(authUser.getUser(), localDate, restaurant);
+            } else {
+                newVote = currentVoteByUsers.get();
+                newVote.setRestaurant(restaurant);
+                newVote.setVoteDate(LocalDate.now());
+            }
 
-        Vote created = voteRepository.save(newVote);
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL)
-                .buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(created);
+            Vote created = voteRepository.save(newVote);
+            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(REST_URL)
+                    .buildAndExpand(created.getId()).toUri();
+            return ResponseEntity.created(uriOfNewResource).body(created);
+        }else {
+            throw new VoteException("Voting time ended at 11:00 AM");
+        }
     }
 }
