@@ -34,7 +34,7 @@ public class VoteController {
         this.voteService = voteService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public List<Vote> getAllVotesForUser(@PathVariable int userId) {
         log.info("get all Vote for User {}", userId);
@@ -42,7 +42,7 @@ public class VoteController {
                 .orElseThrow(() -> new NotFoundException("not found"));
     }
 
-    @GetMapping()
+    @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<Vote> getAllVotesByDate() {
         log.info("get all Vote for ALL Users");
@@ -50,12 +50,12 @@ public class VoteController {
                 .orElseThrow(() -> new NotFoundException("not found"));
     }
 
-    @PostMapping("/{restaurantId}")
+    @PostMapping("/restaurants/{restaurantId}")
     public ResponseEntity<Vote> create(@PathVariable int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
 
         Vote created = voteService.createOrUpdate(restaurantId, authUser.getUser());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL)
+                .path(REST_URL+ "restaurants")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }

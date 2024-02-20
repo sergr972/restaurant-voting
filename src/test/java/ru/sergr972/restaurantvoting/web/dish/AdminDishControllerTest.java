@@ -20,7 +20,7 @@ import static ru.sergr972.restaurantvoting.web.user.UserTestData.ADMIN_MAIL;
 
 class AdminDishControllerTest extends AbstractControllerTest {
 
-    public static final String REST_URL_MENU = "/api/admin/restaurant/1/dish";
+    public static final String REST_URL_MENU = "/api/admin/restaurants/1/dishes";
     private static final String REST_URL_MENU_SLASH = REST_URL_MENU + '/';
 
     @Autowired
