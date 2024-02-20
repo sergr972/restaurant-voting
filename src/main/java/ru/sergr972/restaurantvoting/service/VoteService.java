@@ -2,7 +2,9 @@ package ru.sergr972.restaurantvoting.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sergr972.restaurantvoting.error.VoteException;
 import ru.sergr972.restaurantvoting.model.Restaurant;
 import ru.sergr972.restaurantvoting.model.User;
@@ -28,6 +30,8 @@ public class VoteService {
         this.restaurantRepository = restaurantRepository;
     }
 
+    @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Vote createOrUpdate(int restaurantId, User user) {
         log.info("create or update UserVote {}", user);
         LocalDate localDate = LocalDateTime.now().toLocalDate();
