@@ -1,5 +1,6 @@
 package ru.sergr972.restaurantvoting.web.vote;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class VoteController {
     }
 
     @GetMapping("/users/{userId}")
+    @Operation(description = "Get votes history for user.")
     @ResponseStatus(HttpStatus.OK)
     public List<Vote> getAllVotesForUser(@PathVariable int userId) {
         log.info("get all Vote for User {}", userId);
@@ -43,6 +45,7 @@ public class VoteController {
     }
 
     @GetMapping("/users")
+    @Operation(description = "Get all votes for today.")
     @ResponseStatus(HttpStatus.OK)
     public List<Vote> getAllVotesByDate() {
         log.info("get all Vote for ALL Users");
@@ -51,11 +54,12 @@ public class VoteController {
     }
 
     @PostMapping("/restaurants/{restaurantId}")
+    @Operation(description = "Сreate or update a user voice.")
     public ResponseEntity<Vote> create(@PathVariable int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
 
         Vote created = voteService.createOrUpdate(restaurantId, authUser.getUser());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL+ "restaurants")
+                .path(REST_URL + "restaurants")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
