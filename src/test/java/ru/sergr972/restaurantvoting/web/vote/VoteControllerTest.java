@@ -49,7 +49,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = USER_MAIL)
     void create() throws Exception {
         Vote newVote = getNewVote();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_SLASH + getNewVote().getRestaurant().id())
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_SLASH + "/restaurants/" + getNewVote().getRestaurant().id())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newVote)))
                 .andExpect(status().isCreated());
