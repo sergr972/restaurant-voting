@@ -40,13 +40,13 @@ public class VoteService {
 
         if (localTime.isBefore(endOfVote)) {
             Optional<Vote> currentVotes = voteRepository.getVoteByUserAndVoteDate(user, localDate);
-            Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                    .orElseThrow(() -> new NotFoundException("not found restaurant " + restaurantId));
             if (currentVotes.isEmpty()) {
-                Vote newVote = new Vote(null, localDate, user, restaurant);
+                Vote newVote = new Vote(user, localDate, restaurantRepository.getExisted(restaurantId));
                 voteRepository.save(newVote);
-                return new VoteTo(null, localDate, newVote.getUser().getId(), newVote.getRestaurant().getId());
+                return new VoteTo(newVote.id(), localDate, newVote.getUser().getId(), newVote.getRestaurant().getId());
             } else {
+                Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                        .orElseThrow(() -> new NotFoundException("not found restaurant " + restaurantId));
                 currentVotes.get().setRestaurant(restaurant);
                 voteRepository.save(currentVotes.get());
                 return new VoteTo(currentVotes.get().id(), currentVotes.get().getVoteDate(),
