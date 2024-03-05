@@ -38,22 +38,22 @@ public class VoteService {
         LocalTime localTime = LocalDateTime.now().toLocalTime();
         LocalTime endOfVote = LocalTime.of(11, 0);
 
-        if (localTime.isBefore(endOfVote)) {
-            Optional<Vote> currentVotes = voteRepository.getVoteByUserAndVoteDate(user, localDate);
-            if (currentVotes.isEmpty()) {
-                Vote newVote = new Vote(user, localDate, restaurantRepository.getExisted(restaurantId));
-                voteRepository.save(newVote);
-                return new VoteTo(newVote.id(), localDate, newVote.getUser().getId(), newVote.getRestaurant().getId());
-            } else {
+        Optional<Vote> currentVotes = voteRepository.getVoteByUserAndVoteDate(user, localDate);
+        if (currentVotes.isEmpty()) {
+            Vote newVote = new Vote(user, localDate, restaurantRepository.getExisted(restaurantId));
+            voteRepository.save(newVote);
+            return new VoteTo(newVote.id(), localDate, newVote.getUser().getId(), newVote.getRestaurant().getId());
+        } else {
+            if (localTime.isBefore(endOfVote)) {
                 Restaurant restaurant = restaurantRepository.findById(restaurantId)
                         .orElseThrow(() -> new NotFoundException("not found restaurant " + restaurantId));
                 currentVotes.get().setRestaurant(restaurant);
                 voteRepository.save(currentVotes.get());
                 return new VoteTo(currentVotes.get().id(), currentVotes.get().getVoteDate(),
                         currentVotes.get().getUser().id(), currentVotes.get().getRestaurant().getId());
+            } else {
+                throw new VoteException("Re-voting time ended at 11:00 AM");
             }
-        } else {
-            throw new VoteException("Voting time ended at 11:00 AM");
         }
     }
 }
