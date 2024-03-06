@@ -21,6 +21,6 @@ public class VoteTestData {
     }
 
     public static VoteTo getUpdateVote() {
-        return new VoteTo(7, LocalDate.now(), UserTestData.USER_ID, RESTAURANT_ID + 3);
+        return new VoteTo(6, LocalDate.now(), UserTestData.ADMIN_ID, RESTAURANT_ID + 3);
     }
 }

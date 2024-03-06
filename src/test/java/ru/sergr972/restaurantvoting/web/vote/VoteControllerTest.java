@@ -11,6 +11,7 @@ import ru.sergr972.restaurantvoting.to.VoteTo;
 import ru.sergr972.restaurantvoting.util.JsonUtil;
 import ru.sergr972.restaurantvoting.web.AbstractControllerTest;
 
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -21,8 +22,6 @@ import static ru.sergr972.restaurantvoting.web.vote.VoteController.REST_URL;
 import static ru.sergr972.restaurantvoting.web.vote.VoteTestData.*;
 
 class VoteControllerTest extends AbstractControllerTest {
-
-    static final String REST_URL_SLASH = REST_URL + "/";
 
     @Autowired
     VoteRepository repository;
@@ -51,7 +50,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = USER_MAIL)
     void create() throws Exception {
         VoteTo newVote = getNewVote();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_SLASH + "/restaurants/" + getNewVote().getRestaurantId())
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "/restaurants/" + getNewVote().getRestaurantId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newVote)))
                 .andExpect(status().isCreated());
@@ -69,16 +68,16 @@ class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
+    @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         VoteTo updatedVote = getUpdateVote();
-        perform(MockMvcRequestBuilders.post(REST_URL_SLASH + "/restaurants/" + getUpdateVote().getRestaurantId())
+        perform(MockMvcRequestBuilders.post(REST_URL + "/restaurants/" + getUpdateVote().getRestaurantId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedVote)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        VOTE_TO_MATCHER.assertMatch(repository.findById(getUpdateVote().getId())
+        VOTE_TO_MATCHER.assertMatch(repository.getVoteByUserAndVoteDate(admin, LocalDate.now())
                         .stream()
                         .map(v -> new VoteTo(v.id(), v.getVoteDate(), v.getUser().getId(), v.getRestaurant().getId()))
                         .collect(Collectors.toList())
