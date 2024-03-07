@@ -10,6 +10,7 @@ import ru.sergr972.restaurantvoting.repository.VoteRepository;
 import ru.sergr972.restaurantvoting.to.VoteTo;
 import ru.sergr972.restaurantvoting.util.JsonUtil;
 import ru.sergr972.restaurantvoting.web.AbstractControllerTest;
+import ru.sergr972.restaurantvoting.web.user.UserTestData;
 
 import java.time.LocalDate;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.sergr972.restaurantvoting.web.restaurant.RestaurantTestData.RESTAURANT_ID;
 import static ru.sergr972.restaurantvoting.web.user.UserTestData.*;
 import static ru.sergr972.restaurantvoting.web.vote.VoteController.REST_URL;
 import static ru.sergr972.restaurantvoting.web.vote.VoteTestData.*;
@@ -82,5 +84,27 @@ class VoteControllerTest extends AbstractControllerTest {
                         .map(v -> new VoteTo(v.id(), v.getVoteDate(), v.getUser().getId(), v.getRestaurant().getId()))
                         .collect(Collectors.toList())
                 , updatedVote);
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void createInvalid() throws Exception {
+        VoteTo createTo = new VoteTo(7, LocalDate.now(), UserTestData.USER_ID, RESTAURANT_ID + 4);
+        perform(MockMvcRequestBuilders.post(REST_URL + "/restaurants/" + RESTAURANT_ID + 4)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(createTo)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void updateInvalid() throws Exception {
+        VoteTo updatedTo = new VoteTo(6, LocalDate.now(), ADMIN_ID, RESTAURANT_ID + 4);
+        perform(MockMvcRequestBuilders.put(REST_URL + "/restaurants/" + RESTAURANT_ID + 4)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }

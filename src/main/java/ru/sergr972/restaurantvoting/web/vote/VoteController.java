@@ -94,7 +94,7 @@ public class VoteController {
     public void update(@PathVariable int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         LocalDate localDate = LocalDateTime.now().toLocalDate();
         LocalTime localTime = LocalDateTime.now().toLocalTime();
-        LocalTime endOfVote = LocalTime.of(15, 0);
+        LocalTime endOfVote = LocalTime.of(11, 0);
 
         getRestaurant(restaurantId);
         Optional<Vote> currentVotes = voteRepository.getVoteByUserAndVoteDate(authUser.getUser(), localDate);
