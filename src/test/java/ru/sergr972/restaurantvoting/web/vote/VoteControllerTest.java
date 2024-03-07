@@ -71,11 +71,11 @@ class VoteControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         VoteTo updatedVote = getUpdateVote();
-        perform(MockMvcRequestBuilders.post(REST_URL + "/restaurants/" + getUpdateVote().getRestaurantId())
+        perform(MockMvcRequestBuilders.put(REST_URL + "/restaurants/" + getUpdateVote().getRestaurantId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedVote)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isNoContent());
 
         VOTE_TO_MATCHER.assertMatch(repository.getVoteByUserAndVoteDate(admin, LocalDate.now())
                         .stream()
