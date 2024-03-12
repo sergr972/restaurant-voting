@@ -20,12 +20,11 @@ import ru.sergr972.restaurantvoting.web.AuthUser;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static ru.sergr972.restaurantvoting.util.TimeUtil.checkTime;
 import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
 
 @RestController
@@ -82,7 +81,7 @@ public class VoteController {
             log.info("create {}", newVote);
             checkNew(newVote);
             voteRepository.save(newVote);
-            VoteTo created = new VoteTo(newVote.id(), newVote.getVoteDate(), newVote.getUser().getId(), newVote.getRestaurant().getId());
+            VoteTo created = voteMapper.toTo(newVote);
             URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path(REST_URL + "/{id}")
                     .buildAndExpand(created.getId()).toUri();
@@ -95,21 +94,15 @@ public class VoteController {
     @Operation(description = "Update a user voice.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
-        LocalDate localDate = LocalDateTime.now().toLocalDate();
-        LocalTime localTime = LocalDateTime.now().toLocalTime();
-        LocalTime endOfVote = LocalTime.of(23, 0);
 
         getRestaurant(restaurantId);
-        Optional<Vote> currentVotes = voteRepository.getVoteByUserAndVoteDate(authUser.getUser(), localDate);
+        Optional<Vote> currentVotes = voteRepository.getVoteByUserAndVoteDate(authUser.getUser(), LocalDate.now());
         if (currentVotes.isEmpty()) {
             throw new VoteException("user " + authUser.getUser().id() + " not voted");
         } else {
-            if (localTime.isBefore(endOfVote)) {
-                currentVotes.get().setRestaurant(restaurantRepository.getExisted(restaurantId));
-                voteRepository.save(currentVotes.get());
-            } else {
-                throw new VoteException("Re-voting time ended at 11:00 AM");
-            }
+            checkTime();
+            currentVotes.get().setRestaurant(restaurantRepository.getExisted(restaurantId));
+            voteRepository.save(currentVotes.get());
         }
     }
 
