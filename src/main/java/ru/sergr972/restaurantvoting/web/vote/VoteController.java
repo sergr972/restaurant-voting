@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.sergr972.restaurantvoting.error.NotFoundException;
 import ru.sergr972.restaurantvoting.error.VoteException;
+import ru.sergr972.restaurantvoting.mapper.VoteMapper;
 import ru.sergr972.restaurantvoting.model.Vote;
 import ru.sergr972.restaurantvoting.repository.RestaurantRepository;
 import ru.sergr972.restaurantvoting.repository.VoteRepository;
@@ -36,11 +37,13 @@ public class VoteController {
 
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;
+    private final VoteMapper voteMapper;
 
     @Autowired
-    public VoteController(VoteRepository voteRepository, RestaurantRepository restaurantRepository) {
+    public VoteController(VoteRepository voteRepository, RestaurantRepository restaurantRepository, VoteMapper voteMapper) {
         this.voteRepository = voteRepository;
         this.restaurantRepository = restaurantRepository;
+        this.voteMapper = voteMapper;
     }
 
     @GetMapping("/users/{userId}")
@@ -51,7 +54,7 @@ public class VoteController {
         return voteRepository.findAllVotesByUser(userId)
                 .orElseThrow(() -> new NotFoundException("not found"))
                 .stream()
-                .map(v -> new VoteTo(v.id(), v.getVoteDate(), v.getUser().getId(), v.getRestaurant().getId()))
+                .map(voteMapper::toTo)
                 .collect(Collectors.toList());
     }
 
@@ -63,7 +66,7 @@ public class VoteController {
         return voteRepository.findAllVotesByToDay(LocalDate.now())
                 .orElseThrow(() -> new NotFoundException("not found"))
                 .stream()
-                .map(v -> new VoteTo(v.id(), v.getVoteDate(), v.getUser().getId(), v.getRestaurant().getId()))
+                .map(voteMapper::toTo)
                 .collect(Collectors.toList());
     }
 
@@ -94,7 +97,7 @@ public class VoteController {
     public void update(@PathVariable int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         LocalDate localDate = LocalDateTime.now().toLocalDate();
         LocalTime localTime = LocalDateTime.now().toLocalTime();
-        LocalTime endOfVote = LocalTime.of(11, 0);
+        LocalTime endOfVote = LocalTime.of(23, 0);
 
         getRestaurant(restaurantId);
         Optional<Vote> currentVotes = voteRepository.getVoteByUserAndVoteDate(authUser.getUser(), localDate);
