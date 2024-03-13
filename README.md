@@ -23,7 +23,7 @@ counted per user
  - Each restaurant provides a new menu each day.
 
 -------------------------------------------------------------
-- Stack: [JDK 21](http://jdk.java.net/21/), Spring Boot 3.x, Lombok, H2, Caffeine Cache, SpringDoc OpenApi 2.x
+- Stack: [JDK 21](http://jdk.java.net/21/), Spring Boot 3.x, Lombok, H2, Caffeine Cache, Swagger/OpenAPI 3.0, MapStruct
 - Run: `mvn spring-boot:run` in root directory.
 -----------------------------------------------------
 [REST API documentation](http://localhost:8080/)
