@@ -1,7 +1,10 @@
 package ru.sergr972.restaurantvoting.model;
 
-import jakarta.persistence.*;
-import lombok.AccessLevel;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,15 +15,12 @@ import java.util.Set;
 @Table(name = "restaurant")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Restaurant extends NamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Dish> menu;
-
-    public Restaurant(String name) {
-        super(null, name);
-    }
 
     public Restaurant(Integer id, String name) {
         super(id, name);

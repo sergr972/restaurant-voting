@@ -8,12 +8,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.sergr972.restaurantvoting.error.NotFoundException;
+import ru.sergr972.restaurantvoting.mapper.RestaurantMapperImpl;
 import ru.sergr972.restaurantvoting.model.Restaurant;
 import ru.sergr972.restaurantvoting.repository.RestaurantRepository;
+import ru.sergr972.restaurantvoting.to.RestaurantTo;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.sergr972.restaurantvoting.web.RestValidation.assureIdConsistent;
 import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
@@ -26,50 +28,57 @@ public class AdminRestaurantController {
     static final String REST_URL = "/api/admin/restaurants";
 
     protected final RestaurantRepository repository;
+    private final RestaurantMapperImpl restaurantMapper;
 
     @Autowired
-    public AdminRestaurantController(RestaurantRepository repository) {
+    public AdminRestaurantController(RestaurantRepository repository, RestaurantMapperImpl restaurantMapper) {
         this.repository = repository;
+        this.restaurantMapper = restaurantMapper;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Restaurant> getAll() {
-        return repository.getAllRestaurantsWithDishes()
-                .orElseThrow(() -> new NotFoundException("not found"));
+    public List<RestaurantTo> getAll() {
+        return repository.findAll()
+                .stream()
+                .map(restaurantMapper::toTo)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.OK)
-    public Restaurant get(@PathVariable int id) {
-        log.info("get {}", id);
-        return repository.getRestaurantWithDishesById(id)
-                .orElseThrow(() -> new NotFoundException("not found"));
+    public List<RestaurantTo> get(@PathVariable int restaurantId) {
+        log.info("get {}", restaurantId);
+        return repository.findById(restaurantId)
+                .stream()
+                .map(restaurantMapper::toTo)
+                .toList();
     }
 
-    @DeleteMapping("/{id}")
+
+    @DeleteMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
-        log.info("delete {}", id);
-        repository.deleteExisted(id);
+    public void delete(@PathVariable int restaurantId) {
+        log.info("delete {}", restaurantId);
+        repository.deleteExisted(restaurantId);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
+    public ResponseEntity<RestaurantTo> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
         checkNew(restaurant);
-        Restaurant created = repository.prepareAndSave(restaurant);
+        RestaurantTo created = restaurantMapper.toTo(repository.save(restaurant));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
-        log.info("update {} with id={}", restaurant, id);
-        assureIdConsistent(restaurant, id);
-        repository.prepareAndSave(restaurant);
+    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int restaurantId) {
+        log.info("update restaurant with id={}", restaurantId);
+        assureIdConsistent(restaurant, restaurantId);
+        repository.save(restaurant);
     }
 }
