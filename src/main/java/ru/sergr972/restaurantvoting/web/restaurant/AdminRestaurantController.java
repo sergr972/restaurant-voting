@@ -47,14 +47,10 @@ public class AdminRestaurantController {
 
     @GetMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<RestaurantTo> get(@PathVariable int restaurantId) {
+    public RestaurantTo get(@PathVariable int restaurantId) {
         log.info("get {}", restaurantId);
-        return repository.findById(restaurantId)
-                .stream()
-                .map(restaurantMapper::toTo)
-                .toList();
+        return restaurantMapper.toTo(repository.getExisted(restaurantId));
     }
-
 
     @DeleteMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
