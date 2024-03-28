@@ -1,6 +1,6 @@
 package ru.sergr972.restaurantvoting.util;
 
-import ru.sergr972.restaurantvoting.error.VoteException;
+import ru.sergr972.restaurantvoting.error.IllegalRequestDataException;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -14,7 +14,7 @@ public class TimeUtil {
 
     public static void checkTime() {
         if (LocalTime.now(clock).isAfter(END_OF_VOTE)) {
-            throw new VoteException("Re-voting time ended at 11:00 AM");
+            throw new IllegalRequestDataException("Re-voting time ended at 11:00 AM");
         }
     }
 

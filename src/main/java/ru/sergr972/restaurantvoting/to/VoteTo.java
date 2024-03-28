@@ -1,5 +1,6 @@
 package ru.sergr972.restaurantvoting.to;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class VoteTo extends BaseTo{
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int userId;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate voteDate;
+
     private int restaurantId;
 
     public VoteTo(Integer id, LocalDate voteDate, int userId, int restaurantId) {
@@ -23,5 +28,4 @@ public class VoteTo extends BaseTo{
         this.voteDate = voteDate;
         this.restaurantId = restaurantId;
     }
-
 }
