@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.sergr972.restaurantvoting.error.IllegalRequestDataException;
 import ru.sergr972.restaurantvoting.mapper.VoteMapper;
 import ru.sergr972.restaurantvoting.model.User;
 import ru.sergr972.restaurantvoting.model.Vote;
@@ -60,7 +59,7 @@ public class VoteController {
     @GetMapping("/last-user-vote")
     @Operation(description = "Get user vote for today.")
     @ResponseStatus(HttpStatus.OK)
-    public VoteTo getUserVoteByDate(@AuthenticationPrincipal AuthUser authUser) {
+    public VoteTo getLastVoteForUser(@AuthenticationPrincipal AuthUser authUser) {
         User user = authUser.getUser();
         log.info("get Vote for User {}", user);
         return voteMapper.toTo(voteRepository.getVoteByUserAndVoteDate(user, now()));
@@ -71,11 +70,7 @@ public class VoteController {
     @Operation(description = "Сreate a user voice.")
     public ResponseEntity<VoteTo> create(@RequestBody @Valid VoteTo voteTo, @AuthenticationPrincipal AuthUser authUser) {
         User user = authUser.getUser();
-        Vote userVote = voteRepository.getVoteByUserAndVoteDate(user, now());
-        if (userVote.isNew()) {
-            throw new IllegalRequestDataException(user + " has voted");
-        } else {
-            Vote newVote = new Vote(AuthUser.authUser(), now(), restaurantRepository.getExisted(voteTo.getRestaurantId()));
+            Vote newVote = new Vote(user, now(), restaurantRepository.getExisted(voteTo.getRestaurantId()));
             log.info("create {} for User {}", newVote, user);
             checkNew(newVote);
             voteRepository.save(newVote);
@@ -84,7 +79,6 @@ public class VoteController {
                     .path(REST_URL + "/{id}")
                     .buildAndExpand(created.getId()).toUri();
             return ResponseEntity.created(uriOfNewResource).body(created);
-        }
     }
 
     @PutMapping()

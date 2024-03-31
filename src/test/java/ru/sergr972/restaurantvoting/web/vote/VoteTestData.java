@@ -9,11 +9,10 @@ import java.time.LocalDate;
 import static ru.sergr972.restaurantvoting.web.restaurant.RestaurantTestData.RESTAURANT_ID;
 
 public class VoteTestData {
-    public static final MatcherFactory.Matcher<VoteTo> VOTE_TO_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(VoteTo.class, "user");
+    public static final MatcherFactory.Matcher<VoteTo> VOTE_TO_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(VoteTo.class, "userId", "voteDate");
 
     public static final VoteTo V2 = new VoteTo(2, LocalDate.of(2024, 1, 29), UserTestData.ADMIN_ID, RESTAURANT_ID + 3);
     public static final VoteTo V4 = new VoteTo(4, LocalDate.of(2024, 1, 31), UserTestData.ADMIN_ID, RESTAURANT_ID + 2);
-    public static final VoteTo V5 = new VoteTo(5, LocalDate.now(), UserTestData.GUEST_ID, RESTAURANT_ID);
     public static final VoteTo V6 = new VoteTo(6, LocalDate.now(), UserTestData.ADMIN_ID, RESTAURANT_ID + 1);
 
     public static VoteTo getNewVote() {

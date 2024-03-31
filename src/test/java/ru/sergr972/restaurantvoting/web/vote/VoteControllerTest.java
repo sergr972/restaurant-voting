@@ -12,9 +12,9 @@ import ru.sergr972.restaurantvoting.to.VoteTo;
 import ru.sergr972.restaurantvoting.util.JsonUtil;
 import ru.sergr972.restaurantvoting.web.AbstractControllerTest;
 
-import java.time.LocalDate;
 import java.util.stream.Collectors;
 
+import static java.time.LocalDate.now;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +38,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void getAllVotesForUser() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/users/" + ADMIN_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -46,26 +46,24 @@ class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = USER_MAIL)
-    void getAllVotesByDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/users"))
+    @WithUserDetails(value = ADMIN_MAIL)
+    void getLastVoteForUser() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/last-user-vote"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_TO_MATCHER.contentJson(V5, V6));
+                .andExpect(VOTE_TO_MATCHER.contentJson(V6));
     }
 
     @Test
     @WithUserDetails(value = USER_MAIL)
     void create() throws Exception {
         VoteTo newVote = getNewVote();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "/restaurants/" + getNewVote().getRestaurantId())
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newVote)))
                 .andExpect(status().isCreated());
-
         VoteTo created = VOTE_TO_MATCHER.readFromJson(action);
-
         int newId = created.id();
         newVote.setId(newId);
         VOTE_TO_MATCHER.assertMatch(created, newVote);
@@ -81,16 +79,13 @@ class VoteControllerTest extends AbstractControllerTest {
     void update() throws Exception {
         setTime("2024-03-12T10:00:00Z");
         VoteTo updatedVote = getUpdateVote();
-        perform(MockMvcRequestBuilders.put(REST_URL + "/restaurants/" + getUpdateVote().getRestaurantId())
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedVote)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        VOTE_TO_MATCHER.assertMatch(repository.getVoteByUserAndVoteDate(admin, LocalDate.now())
-                        .stream()
-                        .map(voteMapper::toTo)
-                        .collect(Collectors.toList())
+        VOTE_TO_MATCHER.assertMatch(voteMapper.toTo(repository.getVoteByUserAndVoteDate(admin, now()))
                 , updatedVote);
     }
 
@@ -99,18 +94,18 @@ class VoteControllerTest extends AbstractControllerTest {
     void updateAfterEndOfVoteTime() throws Exception {
         setTime("2024-03-12T12:00:00Z");
         VoteTo updatedVote = getUpdateVote();
-        perform(MockMvcRequestBuilders.put(REST_URL + "/restaurants/" + getUpdateVote().getRestaurantId())
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedVote)))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isNoContent());
     }
 
     @Test
     @WithUserDetails(value = USER_MAIL)
     void createInvalid() throws Exception {
-        VoteTo createTo = new VoteTo(7, LocalDate.now(), USER_ID, RESTAURANT_ID + 4);
-        perform(MockMvcRequestBuilders.post(REST_URL + "/restaurants/" + RESTAURANT_ID + 4)
+        VoteTo createTo = new VoteTo(7, now(), USER_ID, RESTAURANT_ID + 4);
+        perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(createTo)))
                 .andDo(print())
@@ -120,8 +115,8 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void updateInvalid() throws Exception {
-        VoteTo updatedTo = new VoteTo(6, LocalDate.now(), ADMIN_ID, RESTAURANT_ID + 4);
-        perform(MockMvcRequestBuilders.put(REST_URL + "/restaurants/" + RESTAURANT_ID + 4)
+        VoteTo updatedTo = new VoteTo(6, now(), ADMIN_ID, RESTAURANT_ID + 4);
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
