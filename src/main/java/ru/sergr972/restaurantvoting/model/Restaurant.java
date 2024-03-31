@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "restaurant")
@@ -20,13 +20,13 @@ public class Restaurant extends NamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Set<Dish> menu;
+    private List<Menu> menu;
 
     public Restaurant(Integer id, String name) {
         super(id, name);
     }
 
-    public Restaurant(Integer id, String name, Set<Dish> menu) {
+    public Restaurant(Integer id, String name, List<Menu> menu) {
         super(id, name);
         this.menu = menu;
     }

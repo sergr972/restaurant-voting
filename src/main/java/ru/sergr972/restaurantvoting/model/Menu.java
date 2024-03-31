@@ -7,19 +7,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Range;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "dish")
+@Table(name = "menu_item")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Dish extends NamedEntity {
+public class Menu extends NamedEntity {
 
     @Column(name = "price", nullable = false)
-    @Range(min = 1, max = 100000)
     private int price;
 
     @Column(name = "date", nullable = false)
@@ -31,17 +29,17 @@ public class Dish extends NamedEntity {
     @JsonIgnore
     private Restaurant restaurant;
 
-    public Dish(String name, LocalDate date, int price, Restaurant restaurant) {
+    public Menu(String name, LocalDate date, int price, Restaurant restaurant) {
         this(null, name, date, price, restaurant);
     }
 
-    public Dish(Integer id, String name, LocalDate date, int price) {
+    public Menu(Integer id, String name, LocalDate date, int price) {
         super(id, name);
         this.date = date;
         this.price = price;
     }
 
-    public Dish(Integer id, String name, LocalDate date, int price, Restaurant restaurant) {
+    public Menu(Integer id, String name, LocalDate date, int price, Restaurant restaurant) {
         super(id, name);
         this.date = date;
         this.price = price;

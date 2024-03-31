@@ -14,7 +14,7 @@ VALUES ('ROSTIKS'),
        ('HACHOPURI'),
        ('TOKIO');
 
-INSERT INTO DISH(date, restaurant_id, price, name)
+INSERT INTO MENU_ITEM(date, restaurant_id, price, name)
 VALUES ('2024-01-31', 1, 150, 'Dish1'),
        (CURRENT_DATE, 1, 250, 'Dish2'),
        (CURRENT_DATE, 1, 350, 'Dish3'),

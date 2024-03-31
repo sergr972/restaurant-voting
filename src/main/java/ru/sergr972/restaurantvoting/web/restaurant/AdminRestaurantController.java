@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.sergr972.restaurantvoting.mapper.RestaurantMapper;
 import ru.sergr972.restaurantvoting.mapper.RestaurantMapperImpl;
 import ru.sergr972.restaurantvoting.model.Restaurant;
 import ru.sergr972.restaurantvoting.repository.RestaurantRepository;
@@ -27,8 +28,8 @@ public class AdminRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
 
-    protected final RestaurantRepository repository;
-    private final RestaurantMapperImpl restaurantMapper;
+    private final RestaurantRepository repository;
+    private final RestaurantMapper restaurantMapper;
 
     @Autowired
     public AdminRestaurantController(RestaurantRepository repository, RestaurantMapperImpl restaurantMapper) {

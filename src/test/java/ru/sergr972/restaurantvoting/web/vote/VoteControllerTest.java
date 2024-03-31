@@ -98,7 +98,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedVote)))
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
