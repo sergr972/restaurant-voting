@@ -41,14 +41,14 @@ public class AdminMenuController {
     @ResponseStatus(HttpStatus.OK)
     public List<MenuTo> getAllMenuItemsForRestaurant(@PathVariable int restaurantId) {
         log.info("get all Menu for restaurant {}", restaurantId);
-        return getAll(menuRepository.findMenuItemsByRestaurant_Id(restaurantId));
+        return getAll(menuRepository.findMenuItemsByRestaurantId(restaurantId));
     }
 
     @GetMapping("/restaurants/{restaurantId}/today")
     @ResponseStatus(HttpStatus.OK)
     public List<MenuTo> getMenuItemsForRestaurantByToday(@PathVariable int restaurantId) {
         log.info("get all MenuItems for restaurant {} by today", restaurantId);
-        return getAll(menuRepository.findMenuItemsByRestaurant_IdAndDate(restaurantId, now()));
+        return getAll(menuRepository.findMenuItemsByRestaurantIdAndDate(restaurantId, now()));
     }
 
     @GetMapping("/{id}")

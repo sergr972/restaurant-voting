@@ -20,7 +20,7 @@ public class Menu extends NamedEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "dish_date", nullable = false)
     private LocalDate date;
 
     @ManyToOne

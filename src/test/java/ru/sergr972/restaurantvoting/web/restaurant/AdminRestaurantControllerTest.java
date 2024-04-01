@@ -74,7 +74,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void createWithLocation() throws Exception {
-        Restaurant newRestaurant = RestaurantTestData.getNew();
+        Restaurant newRestaurant = getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newRestaurant)))
@@ -90,7 +90,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
-        Restaurant updated = RestaurantTestData.getUpdated();
+        Restaurant updated = getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
