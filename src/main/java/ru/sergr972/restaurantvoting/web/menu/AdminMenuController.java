@@ -15,6 +15,7 @@ import ru.sergr972.restaurantvoting.to.MenuTo;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.time.LocalDate.now;
 import static ru.sergr972.restaurantvoting.web.RestValidation.assureIdConsistent;
@@ -38,16 +39,16 @@ public class AdminMenuController {
 
     @GetMapping("/restaurants/{restaurantId}/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<Menu> getAllMenuItemsForRestaurant(@PathVariable int restaurantId) {
+    public List<MenuTo> getAllMenuItemsForRestaurant(@PathVariable int restaurantId) {
         log.info("get all Menu for restaurant {}", restaurantId);
-        return menuRepository.findMenuItemsByRestaurant_Id(restaurantId);
+        return getAll(menuRepository.findMenuItemsByRestaurant_Id(restaurantId));
     }
 
     @GetMapping("/restaurants/{restaurantId}/today")
     @ResponseStatus(HttpStatus.OK)
-    public List<Menu> getMenuItemsForRestaurantByToday(@PathVariable int restaurantId) {
+    public List<MenuTo> getMenuItemsForRestaurantByToday(@PathVariable int restaurantId) {
         log.info("get all MenuItems for restaurant {} by today", restaurantId);
-        return menuRepository.findMenuItemsByRestaurant_IdAndDate(restaurantId, now());
+        return getAll(menuRepository.findMenuItemsByRestaurant_IdAndDate(restaurantId, now()));
     }
 
     @GetMapping("/{id}")
@@ -69,7 +70,7 @@ public class AdminMenuController {
         Menu menu = menuMapper.toMenu(menuTo);
         log.info("create Menu Item {} in Restaurant {}", menu, menu.getRestaurant().id());
         checkNew(menu);
-        MenuTo created = menuMapper.toTo( menuRepository.save(menu));
+        MenuTo created = menuMapper.toTo(menuRepository.save(menu));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -78,9 +79,16 @@ public class AdminMenuController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateMenuItem(@Valid @RequestBody Menu menu, @PathVariable int id) {
-        assureIdConsistent(menu, id);
-        log.info("update Menu Item {} with id={} restaurant {}", menu, id, menu.getRestaurant().id());
-        menuRepository.save(menu);
+    public void updateMenuItem(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
+        assureIdConsistent(menuTo, id);
+        log.info("update Menu Item {} with id={} restaurant {}", menuTo, id, menuTo.getRestaurantId());
+        menuRepository.save(menuMapper.toMenu(menuTo));
+    }
+
+    private List<MenuTo> getAll(List<Menu> menuList) {
+        return menuList
+                .stream()
+                .map(menuMapper::toTo)
+                .collect(Collectors.toList());
     }
 }

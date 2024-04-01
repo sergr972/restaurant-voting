@@ -10,19 +10,15 @@ public class MenuTestData {
 
     public static final Integer DISH_ID = 1;
 
-//    public static Menu M1 = new Menu(1, "Dish1", LocalDate.of(2024, 1, 31), 150);
-//    public static Menu M2 = new Menu(2, "Dish2", LocalDate.now(), 250);
-//    public static Menu M3 = new Menu(3, "Dish3", LocalDate.now(), 350);
-
     public static MenuTo M1_TO = new MenuTo(1, "Dish1", LocalDate.of(2024, 1, 31), 150, 1);
     public static MenuTo M2_TO = new MenuTo(2, "Dish2", LocalDate.now(), 250, 1);
     public static MenuTo M3_TO = new MenuTo(3, "Dish3", LocalDate.now(), 350, 1);
 
-//    public static Menu getNewDish() {
-//        return new Menu("NewDish", LocalDate.now(), 950, R_1);
-//    }
+    public static MenuTo getNewDish() {
+        return new MenuTo(null, "NewDish", LocalDate.now(), 950, 1);
+    }
 
-//    public static Menu getUpdatedDish() {
-//        return new Menu(DISH_ID, "UpdatedDish", LocalDate.now(), 951);
-//    }
+    public static MenuTo getUpdatedDish() {
+        return new MenuTo(DISH_ID, "UpdatedDish", LocalDate.now(), 951, 1);
+    }
 }

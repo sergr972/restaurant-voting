@@ -1,6 +1,6 @@
 package ru.sergr972.restaurantvoting.to;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,11 +11,11 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class MenuTo extends NamedEntity {
 
     private int price;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
 
     private Integer restaurantId;
