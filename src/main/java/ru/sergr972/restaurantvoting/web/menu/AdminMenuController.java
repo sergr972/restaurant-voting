@@ -39,34 +39,34 @@ public class AdminMenuController {
 
     @GetMapping("/restaurants/{restaurantId}/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<MenuTo> getAllMenuItemsForRestaurant(@PathVariable int restaurantId) {
+    public List<MenuTo> getAllForRestaurant(@PathVariable int restaurantId) {
         log.info("get all Menu for restaurant {}", restaurantId);
         return getAll(menuRepository.findMenuItemsByRestaurantId(restaurantId));
     }
 
     @GetMapping("/restaurants/{restaurantId}/today")
     @ResponseStatus(HttpStatus.OK)
-    public List<MenuTo> getMenuItemsForRestaurantByToday(@PathVariable int restaurantId) {
+    public List<MenuTo> getForRestaurantByToday(@PathVariable int restaurantId) {
         log.info("get all MenuItems for restaurant {} by today", restaurantId);
         return getAll(menuRepository.findMenuItemsByRestaurantIdAndDate(restaurantId, now()));
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MenuTo getMenuItemById(@PathVariable Integer id) {
+    public MenuTo getById(@PathVariable Integer id) {
         log.info("get MenuItem with id={}", id);
         return menuMapper.toTo(menuRepository.getExisted(id));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMenuItemById(@PathVariable int id) {
+    public void deleteById(@PathVariable int id) {
         log.info("delete MenuItem with id={}", id);
         menuRepository.deleteExisted(id);
     }
 
     @PostMapping()
-    public ResponseEntity<MenuTo> createMenuItem(@Valid @RequestBody MenuTo menuTo) {
+    public ResponseEntity<MenuTo> create(@Valid @RequestBody MenuTo menuTo) {
         Menu menu = menuMapper.toMenu(menuTo);
         log.info("create Menu Item {} in Restaurant {}", menu, menu.getRestaurant().id());
         checkNew(menu);
@@ -79,7 +79,7 @@ public class AdminMenuController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateMenuItem(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
+    public void update(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
         assureIdConsistent(menuTo, id);
         log.info("update Menu Item {} with id={} restaurant {}", menuTo, id, menuTo.getRestaurantId());
         menuRepository.save(menuMapper.toMenu(menuTo));

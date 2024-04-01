@@ -35,7 +35,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getAllMenuItemsForRestaurant() throws Exception {
+    void getAllForRestaurant() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/restaurants/1/all"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -44,7 +44,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getMenuItemsForRestaurantByToday() throws Exception {
+    void getForRestaurantByToday() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/restaurants/1/today"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -54,7 +54,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getMenuItemById() throws Exception {
+    void getById() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + DISH_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -63,7 +63,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void deleteMenuItemById() throws Exception {
+    void deleteById() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + DISH_ID))
                 .andExpect(status().isNoContent());
         assertFalse(repository.findById(DISH_ID).isPresent());
@@ -71,7 +71,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void createMenuItem() throws Exception {
+    void create() throws Exception {
         MenuTo newMenu = getNewDish();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,7 +88,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void updateMenuItem() throws Exception {
+    void update() throws Exception {
         MenuTo updated = getUpdatedDish();
         updated.setId(null);
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH + DISH_ID)

@@ -37,7 +37,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getAllVotesForUser() throws Exception {
+    void getAllForUser() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -47,7 +47,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getLastVoteForUser() throws Exception {
+    void getLastForUser() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/last-user-vote"))
                 .andExpect(status().isOk())
                 .andDo(print())

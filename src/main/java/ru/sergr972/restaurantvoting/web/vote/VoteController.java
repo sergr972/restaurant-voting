@@ -47,7 +47,7 @@ public class VoteController {
     @GetMapping()
     @Operation(description = "Get votes history for user.")
     @ResponseStatus(HttpStatus.OK)
-    public List<VoteTo> getAllVotesForUser(@AuthenticationPrincipal AuthUser authUser) {
+    public List<VoteTo> getAllForUser(@AuthenticationPrincipal AuthUser authUser) {
         User user = authUser.getUser();
         log.info("get all Vote for User {}", user);
         return voteRepository.getAllVotesByUser(user)
@@ -59,7 +59,7 @@ public class VoteController {
     @GetMapping("/last-user-vote")
     @Operation(description = "Get user vote for today.")
     @ResponseStatus(HttpStatus.OK)
-    public VoteTo getLastVoteForUser(@AuthenticationPrincipal AuthUser authUser) {
+    public VoteTo getLastForUser(@AuthenticationPrincipal AuthUser authUser) {
         User user = authUser.getUser();
         log.info("get Vote for User {}", user);
         return voteMapper.toTo(voteRepository.getVoteByUserAndVoteDate(user, now()));
