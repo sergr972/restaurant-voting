@@ -26,7 +26,7 @@ public class Vote extends BaseEntity {
     private User user;
 
     @Column(name = "vote_date", nullable = false)
-    private LocalDate voteDate = LocalDate.now();
+    private LocalDate voteDate;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)

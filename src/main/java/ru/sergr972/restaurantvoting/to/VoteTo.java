@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VoteTo extends BaseTo{
+public class VoteTo extends BaseTo {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int userId;
@@ -26,6 +26,11 @@ public class VoteTo extends BaseTo{
         super(id);
         this.userId = userId;
         this.voteDate = voteDate;
+        this.restaurantId = restaurantId;
+    }
+
+    public VoteTo(Integer id, int restaurantId) {
+        super(id);
         this.restaurantId = restaurantId;
     }
 }

@@ -12,6 +12,7 @@ import ru.sergr972.restaurantvoting.to.VoteTo;
 import ru.sergr972.restaurantvoting.util.JsonUtil;
 import ru.sergr972.restaurantvoting.web.AbstractControllerTest;
 
+import java.time.Clock;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDate.now;
@@ -25,6 +26,9 @@ import static ru.sergr972.restaurantvoting.web.vote.VoteController.REST_URL;
 import static ru.sergr972.restaurantvoting.web.vote.VoteTestData.*;
 
 class VoteControllerTest extends AbstractControllerTest {
+
+    @Autowired
+    private Clock clock;
 
     private final VoteRepository repository;
     private final VoteMapper voteMapper;
@@ -58,13 +62,13 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void create() throws Exception {
-        VoteTo newVote = getNewVote();
+        VoteTo newVote = new VoteTo(null, RESTAURANT_ID);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newVote)))
                 .andExpect(status().isCreated());
         VoteTo created = VOTE_TO_MATCHER.readFromJson(action);
-        int newId = created.id();
+        int newId = created.getId();
         newVote.setId(newId);
         VOTE_TO_MATCHER.assertMatch(created, newVote);
         VOTE_TO_MATCHER.assertMatch(repository.findById(newId)
@@ -77,23 +81,23 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
-        setTime("2024-03-12T10:00:00Z");
-        VoteTo updatedVote = getUpdateVote();
+        setTime("2024-03-12T10:59:00Z");
+        VoteTo updatedVote = new VoteTo(6, RESTAURANT_ID + 3);
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedVote)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        VOTE_TO_MATCHER.assertMatch(voteMapper.toTo(repository.getVoteByUserAndVoteDate(admin, now()))
+        VOTE_TO_MATCHER.assertMatch(voteMapper.toTo(repository.getVoteByUserAndVoteDate(admin, now(clock)))
                 , updatedVote);
     }
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void updateAfterEndOfVoteTime() throws Exception {
-        setTime("2024-03-12T12:00:00Z");
-        VoteTo updatedVote = getUpdateVote();
+        setTime("2024-04-03T11:01:00.00Z");
+        VoteTo updatedVote = new VoteTo(6, RESTAURANT_ID + 3);
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedVote)))
@@ -103,8 +107,8 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void createInvalid() throws Exception {
-        VoteTo createTo = new VoteTo(7, now(), USER_ID, RESTAURANT_ID + 4);
+    void createWithInvalidRestaurant() throws Exception {
+        VoteTo createTo = new VoteTo(null, RESTAURANT_ID + 4);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(createTo)))
@@ -114,8 +118,9 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void updateInvalid() throws Exception {
-        VoteTo updatedTo = new VoteTo(6, now(), ADMIN_ID, RESTAURANT_ID + 4);
+    void updateWithInvalidRestaurant() throws Exception {
+        setTime("2024-03-12T10:59:00Z");
+        VoteTo updatedTo = new VoteTo(6, RESTAURANT_ID + 4);
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))

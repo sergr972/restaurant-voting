@@ -15,6 +15,7 @@ import org.springframework.http.ProblemDetail;
 import ru.sergr972.restaurantvoting.util.JsonUtil;
 
 import java.sql.SQLException;
+import java.time.Clock;
 import java.util.Map;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -24,6 +25,11 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 @Slf4j
 @EnableCaching
 public class AppConfig {
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemDefaultZone();
+    }
 
     @Profile("!test")
     @Bean(initMethod = "start", destroyMethod = "stop")
