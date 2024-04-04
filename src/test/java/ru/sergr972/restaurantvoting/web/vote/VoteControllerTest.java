@@ -127,4 +127,14 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void createDuplicate() throws Exception {
+        VoteTo createTo = new VoteTo(null, RESTAURANT_ID);
+        perform(MockMvcRequestBuilders.post(REST_URL).contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(createTo)))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
 }
