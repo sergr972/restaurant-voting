@@ -1,8 +1,8 @@
 package ru.sergr972.restaurantvoting.web.menu;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +24,13 @@ import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
+@RequiredArgsConstructor
 public class AdminMenuController {
 
     static final String REST_URL = "/api/admin/menus";
 
     private final MenuRepository menuRepository;
     private final MenuMapper menuMapper;
-
-    @Autowired
-    public AdminMenuController(MenuRepository menuRepository, MenuMapper menuMapper) {
-        this.menuRepository = menuRepository;
-        this.menuMapper = menuMapper;
-    }
 
     @GetMapping("/restaurants/{restaurantId}/all")
     @ResponseStatus(HttpStatus.OK)

@@ -27,14 +27,13 @@ import static ru.sergr972.restaurantvoting.web.vote.VoteTestData.*;
 
 class VoteControllerTest extends AbstractControllerTest {
 
-    @Autowired
-    private Clock clock;
-
+    private final Clock clock;
     private final VoteRepository repository;
     private final VoteMapper voteMapper;
 
     @Autowired
-    VoteControllerTest(VoteRepository repository, VoteMapper voteMapper) {
+    VoteControllerTest(Clock clock, VoteRepository repository, VoteMapper voteMapper) {
+        this.clock = clock;
         this.repository = repository;
         this.voteMapper = voteMapper;
     }

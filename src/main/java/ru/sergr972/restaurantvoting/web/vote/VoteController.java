@@ -2,8 +2,8 @@ package ru.sergr972.restaurantvoting.web.vote;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +30,7 @@ import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
+@RequiredArgsConstructor
 public class VoteController {
 
     public static final String REST_URL = "/api/votes";
@@ -38,14 +39,6 @@ public class VoteController {
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;
     private final VoteMapper voteMapper;
-
-    @Autowired
-    public VoteController(Clock clock, VoteRepository voteRepository, RestaurantRepository restaurantRepository, VoteMapper voteMapper) {
-        this.clock = clock;
-        this.voteRepository = voteRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.voteMapper = voteMapper;
-    }
 
     @GetMapping()
     @Operation(description = "Get votes history for user.")
