@@ -40,6 +40,7 @@ public class AdminRestaurantController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<RestaurantTo> getAll() {
+        log.info("Get all restaurants");
         return repository.findAll()
                 .stream()
                 .map(restaurantMapper::toTo)
@@ -49,20 +50,20 @@ public class AdminRestaurantController {
     @GetMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.OK)
     public RestaurantTo get(@PathVariable int restaurantId) {
-        log.info("get {}", restaurantId);
+        log.info("Get restaurant with id={}", restaurantId);
         return restaurantMapper.toTo(repository.getExisted(restaurantId));
     }
 
     @DeleteMapping("/{restaurantId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int restaurantId) {
-        log.info("delete {}", restaurantId);
+        log.info("Delete restaurant with id={}", restaurantId);
         repository.deleteExisted(restaurantId);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RestaurantTo> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
-        log.info("create {}", restaurant);
+        log.info("Create {}", restaurant);
         checkNew(restaurant);
         RestaurantTo created = restaurantMapper.toTo(repository.save(restaurant));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -74,7 +75,7 @@ public class AdminRestaurantController {
     @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int restaurantId) {
-        log.info("update restaurant with id={}", restaurantId);
+        log.info("Update restaurant with id={}", restaurantId);
         assureIdConsistent(restaurant, restaurantId);
         repository.save(restaurant);
     }
