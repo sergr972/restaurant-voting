@@ -2,6 +2,7 @@ package ru.sergr972.restaurantvoting.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sergr972.restaurantvoting.mapper.RestaurantMapper;
@@ -40,16 +41,19 @@ public class RestaurantService {
     }
 
     @Transactional
+    @CacheEvict(value = "menu", allEntries = true)
     public void delete(int restaurantId) {
         repository.deleteExisted(restaurantId);
     }
 
     @Transactional
+    @CacheEvict(value = "menu", allEntries = true)
     public RestaurantTo create(Restaurant restaurant) {
         return mapper.toTo(repository.save(restaurant));
     }
 
     @Transactional
+    @CacheEvict(value = "menu", allEntries = true)
     public void update(Restaurant restaurant) {
         repository.save(restaurant);
     }
