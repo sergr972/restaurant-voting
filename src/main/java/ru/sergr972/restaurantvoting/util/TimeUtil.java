@@ -2,14 +2,11 @@ package ru.sergr972.restaurantvoting.util;
 
 import ru.sergr972.restaurantvoting.error.IllegalRequestDataException;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.*;
 
 public class TimeUtil {
 
-    private static final LocalTime END_OF_VOTE = LocalTime.of(11, 0);
+    public static final LocalTime END_OF_VOTE = LocalTime.of(11, 0);
     public static Clock clock = Clock.systemDefaultZone();
 
     public static void checkTime() {
@@ -18,7 +15,7 @@ public class TimeUtil {
         }
     }
 
-    public static void setTime(String time) {
-        TimeUtil.clock = Clock.fixed(Instant.parse(time), ZoneOffset.UTC);
+    public static void setTime(LocalDate date, LocalTime time) {
+        TimeUtil.clock = Clock.fixed(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
     }
 }

@@ -19,11 +19,12 @@ import static java.time.LocalDate.now;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.sergr972.restaurantvoting.util.TimeUtil.END_OF_VOTE;
 import static ru.sergr972.restaurantvoting.util.TimeUtil.setTime;
 import static ru.sergr972.restaurantvoting.web.data.RestaurantTestData.RESTAURANT_ID;
 import static ru.sergr972.restaurantvoting.web.data.UserTestData.*;
-import static ru.sergr972.restaurantvoting.web.vote.VoteController.REST_URL;
 import static ru.sergr972.restaurantvoting.web.data.VoteTestData.*;
+import static ru.sergr972.restaurantvoting.web.vote.VoteController.REST_URL;
 
 class VoteControllerTest extends AbstractControllerTest {
 
@@ -87,7 +88,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
-        setTime("2024-03-12T10:59:00Z");
+        setTime(now(clock), END_OF_VOTE.minusMinutes(1));
         VoteTo updatedVote = new VoteTo(6, RESTAURANT_ID + 3);
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +104,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void updateAfterEndOfVoteTime() throws Exception {
-        setTime("2024-04-03T11:01:00.00Z");
+         setTime(now(clock), END_OF_VOTE.plusMinutes(1));
         VoteTo updatedVote = new VoteTo(6, RESTAURANT_ID + 3);
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -126,7 +127,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void updateWithInvalidRestaurant() throws Exception {
-        setTime("2024-03-12T10:59:00Z");
+        setTime(now(clock), END_OF_VOTE.minusMinutes(1));
         VoteTo updatedTo = new VoteTo(6, RESTAURANT_ID + 4);
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
