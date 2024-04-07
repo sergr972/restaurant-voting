@@ -1,6 +1,5 @@
 package ru.sergr972.restaurantvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.List;
 public class Restaurant extends NamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ToString.Exclude
     private List<Menu> menu;

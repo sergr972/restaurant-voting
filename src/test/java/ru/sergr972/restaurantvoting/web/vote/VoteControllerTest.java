@@ -88,8 +88,9 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        VOTE_TO_MATCHER.assertMatch(voteMapper.toTo(repository.getVoteByUserAndVoteDate(admin, now(clock)))
-                , updatedVote);
+        VoteTo actual = voteMapper.toTo(repository.getVoteByUserAndVoteDate(admin, now(clock))
+                .orElse(null));
+        VOTE_TO_MATCHER.assertMatch(actual, updatedVote);
     }
 
     @Test

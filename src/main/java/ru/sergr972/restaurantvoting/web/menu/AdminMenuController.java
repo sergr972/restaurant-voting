@@ -8,16 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.sergr972.restaurantvoting.mapper.MenuMapper;
-import ru.sergr972.restaurantvoting.model.Menu;
-import ru.sergr972.restaurantvoting.repository.MenuRepository;
+import ru.sergr972.restaurantvoting.service.MenuService;
 import ru.sergr972.restaurantvoting.to.MenuTo;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.time.LocalDate.now;
 import static ru.sergr972.restaurantvoting.web.RestValidation.assureIdConsistent;
 import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
 
@@ -29,43 +25,41 @@ public class AdminMenuController {
 
     static final String REST_URL = "/api/admin/menus";
 
-    private final MenuRepository menuRepository;
-    private final MenuMapper menuMapper;
+    private final MenuService menuService;
 
     @GetMapping("/restaurants/{restaurantId}/all")
     @ResponseStatus(HttpStatus.OK)
     public List<MenuTo> getAllForRestaurant(@PathVariable int restaurantId) {
         log.info("get all Menu for restaurant {}", restaurantId);
-        return getAll(menuRepository.findMenuItemsByRestaurantId(restaurantId));
+        return menuService.getAll(restaurantId);
     }
 
     @GetMapping("/restaurants/{restaurantId}/today")
     @ResponseStatus(HttpStatus.OK)
     public List<MenuTo> getForRestaurantByToday(@PathVariable int restaurantId) {
         log.info("get all MenuItems for restaurant {} by today", restaurantId);
-        return getAll(menuRepository.findMenuItemsByRestaurantIdAndDate(restaurantId, now()));
+        return menuService.getLast(restaurantId);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public MenuTo getById(@PathVariable Integer id) {
         log.info("get MenuItem with id={}", id);
-        return menuMapper.toTo(menuRepository.getExisted(id));
+        return menuService.getById(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable int id) {
         log.info("delete MenuItem with id={}", id);
-        menuRepository.deleteExisted(id);
+        menuService.delete(id);
     }
 
     @PostMapping()
     public ResponseEntity<MenuTo> create(@Valid @RequestBody MenuTo menuTo) {
-        Menu menu = menuMapper.toMenu(menuTo);
-        log.info("create Menu Item {} in Restaurant {}", menu, menu.getRestaurant().id());
-        checkNew(menu);
-        MenuTo created = menuMapper.toTo(menuRepository.save(menu));
+        log.info("create Menu_Item {} in Restaurant {}", menuTo, menuTo.getRestaurantId());
+        checkNew(menuTo);
+        MenuTo created = menuService.create(menuTo);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -75,15 +69,8 @@ public class AdminMenuController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody MenuTo menuTo, @PathVariable int id) {
-        assureIdConsistent(menuTo, id);
         log.info("update Menu Item {} with id={} restaurant {}", menuTo, id, menuTo.getRestaurantId());
-        menuRepository.save(menuMapper.toMenu(menuTo));
-    }
-
-    private List<MenuTo> getAll(List<Menu> menuList) {
-        return menuList
-                .stream()
-                .map(menuMapper::toTo)
-                .collect(Collectors.toList());
+        assureIdConsistent(menuTo, id);
+        menuService.update(menuTo);
     }
 }
