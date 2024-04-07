@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.sergr972.restaurantvoting.web.user.AdminUserController.REST_URL;
-import static ru.sergr972.restaurantvoting.web.user.UserTestData.*;
+import static ru.sergr972.restaurantvoting.web.data.UserTestData.*;
 
 class AdminUserControllerTest extends AbstractControllerTest {
 

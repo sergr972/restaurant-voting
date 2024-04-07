@@ -20,10 +20,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.sergr972.restaurantvoting.util.TimeUtil.setTime;
-import static ru.sergr972.restaurantvoting.web.restaurant.RestaurantTestData.RESTAURANT_ID;
-import static ru.sergr972.restaurantvoting.web.user.UserTestData.*;
+import static ru.sergr972.restaurantvoting.web.data.RestaurantTestData.RESTAURANT_ID;
+import static ru.sergr972.restaurantvoting.web.data.UserTestData.*;
 import static ru.sergr972.restaurantvoting.web.vote.VoteController.REST_URL;
-import static ru.sergr972.restaurantvoting.web.vote.VoteTestData.*;
+import static ru.sergr972.restaurantvoting.web.data.VoteTestData.*;
 
 class VoteControllerTest extends AbstractControllerTest {
 
@@ -56,6 +56,13 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(VOTE_TO_MATCHER.contentJson(V6));
+    }
+
+@Test
+    @WithUserDetails(value = USER_MAIL)
+    void getLastNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/last-user-vote"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

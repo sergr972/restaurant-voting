@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.sergr972.restaurantvoting.web.menu.AdminMenuController.REST_URL;
-import static ru.sergr972.restaurantvoting.web.menu.MenuTestData.*;
-import static ru.sergr972.restaurantvoting.web.user.UserTestData.ADMIN_MAIL;
+import static ru.sergr972.restaurantvoting.web.data.MenuTestData.*;
+import static ru.sergr972.restaurantvoting.web.data.UserTestData.ADMIN_MAIL;
 
 class AdminMenuControllerTest extends AbstractControllerTest {
 

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.sergr972.restaurantvoting.web.user.ProfileController.REST_URL;
-import static ru.sergr972.restaurantvoting.web.user.UserTestData.*;
+import static ru.sergr972.restaurantvoting.web.data.UserTestData.*;
 
 class ProfileControllerTest extends AbstractControllerTest {
 

@@ -16,9 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.sergr972.restaurantvoting.web.restaurant.AdminRestaurantController.REST_URL;
-import static ru.sergr972.restaurantvoting.web.restaurant.RestaurantTestData.*;
-import static ru.sergr972.restaurantvoting.web.user.UserTestData.ADMIN_MAIL;
-import static ru.sergr972.restaurantvoting.web.user.UserTestData.NOT_FOUND;
+import static ru.sergr972.restaurantvoting.web.data.RestaurantTestData.*;
+import static ru.sergr972.restaurantvoting.web.data.UserTestData.ADMIN_MAIL;
+import static ru.sergr972.restaurantvoting.web.data.UserTestData.NOT_FOUND;
 
 class AdminRestaurantControllerTest extends AbstractControllerTest {
 

@@ -1,4 +1,4 @@
-package ru.sergr972.restaurantvoting.web.user;
+package ru.sergr972.restaurantvoting.web.data;
 
 import ru.sergr972.restaurantvoting.model.Role;
 import ru.sergr972.restaurantvoting.model.User;
