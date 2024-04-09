@@ -1,7 +1,9 @@
 INSERT INTO USERS (name, email, password, registered)
 VALUES ('User', 'user@yandex.ru', '{noop}password', '2024-01-28 9:00'),
        ('Admin', 'admin@gmail.com', '{noop}admin', '2024-01-28 9:30'),
-       ('Guest', 'guest@gmail.com', '{noop}guest', '2024-01-28 10:00');
+       ('Guest', 'guest@gmail.com', '{noop}guest', '2024-01-28 10:00'),
+       ('Guest2', 'guest2@gmail.com', '{noop}guest2', '2024-01-28 10:05'),
+       ('Guest3', 'guest3@gmail.com', '{noop}guest3', '2024-01-28 10:10');
 
 INSERT INTO USER_ROLE (role, user_id)
 VALUES ('USER', 1),
@@ -35,5 +37,7 @@ VALUES ('2024-01-28', 1, 2),
        ('2024-01-30', 1, 1),
        ('2024-01-31', 2, 3),
        (CURRENT_DATE, 3, 1),
-       (CURRENT_DATE, 2, 2);
+       (CURRENT_DATE, 2, 2),
+       (CURRENT_DATE, 4, 2),
+       (CURRENT_DATE, 5, 2);
 

@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.sergr972.restaurantvoting.web.user.AdminUserController.REST_URL;
 import static ru.sergr972.restaurantvoting.web.data.UserTestData.*;
+import static ru.sergr972.restaurantvoting.web.user.AdminUserController.REST_URL;
 
 class AdminUserControllerTest extends AbstractControllerTest {
 
@@ -133,7 +133,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(admin, guest, user));
+                .andExpect(USER_MATCHER.contentJson(admin, guest, guest2, guest3, user));
     }
 
     @Test

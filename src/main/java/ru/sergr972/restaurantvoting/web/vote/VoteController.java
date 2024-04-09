@@ -67,4 +67,11 @@ public class VoteController {
         checkTime();
         service.update(voteTo.getRestaurantId(), authUser.getUser());
     }
+
+    @GetMapping(REST_URL + "/all-today")
+    @Operation(description = "Get all votes for today.")
+    @ResponseStatus(HttpStatus.OK)
+    public List<VoteTo> getAllForToday() {
+        return service.getAllForToday();
+    }
 }

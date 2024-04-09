@@ -54,6 +54,13 @@ public class VoteService {
         voteRepository.save(vote);
     }
 
+    public List<VoteTo> getAllForToday() {
+        return voteRepository.findAllByVoteDate(now(clock))
+                .stream()
+                .map(mapper::toTo)
+                .collect(Collectors.toList());
+    }
+
     private Vote getVote(User user) {
         return voteRepository.getVoteByUserAndVoteDate(user, now(clock))
                 .orElseThrow(() -> new NotFoundException("User " + user + " not voted"));

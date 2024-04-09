@@ -1,6 +1,6 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1505b59550bf456bb941722abd739a73)](https://app.codacy.com/gh/sergr972/restaurant-voting/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-===============================================================
+-------------------------------------------------------------
 
 Restaurant Voting Application
 Technical requirement: Design and implement a REST API using 
@@ -24,13 +24,13 @@ price)
 
  - Each restaurant provides a new menu each day.
 
-===============================================================
+-------------------------------------------------------------
 - Stack: [JDK 21](http://jdk.java.net/21/), Spring Boot 3.x, Lombok, H2,
   Caffeine Cache, Swagger/OpenAPI 3.0, MapStruct
   
 - Run: `mvn spring-boot:run` in root directory.
 
-===============================================================
+-------------------------------------------------------------
 
 [REST API documentation](http://localhost:8080/)
 Credentials:
