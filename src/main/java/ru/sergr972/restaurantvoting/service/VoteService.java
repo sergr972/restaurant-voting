@@ -30,10 +30,7 @@ public class VoteService {
 
     @Transactional(readOnly = true)
     public List<VoteTo> get(User user) {
-        return voteRepository.getAllVotesByUser(user)
-                .stream()
-                .map(mapper::toTo)
-                .collect(Collectors.toList());
+        return get(voteRepository.getAllVotesByUser(user));
     }
 
     @Transactional(readOnly = true)
@@ -54,15 +51,20 @@ public class VoteService {
         voteRepository.save(vote);
     }
 
+    @Transactional
     public List<VoteTo> getAllForToday() {
-        return voteRepository.findAllByVoteDate(now(clock))
-                .stream()
-                .map(mapper::toTo)
-                .collect(Collectors.toList());
+        return get(voteRepository.findAllByVoteDate(now(clock)));
     }
 
     private Vote getVote(User user) {
         return voteRepository.getVoteByUserAndVoteDate(user, now(clock))
                 .orElseThrow(() -> new NotFoundException("User " + user + " not voted"));
+    }
+
+    private List<VoteTo> get(List<Vote> voteList) {
+        return voteList
+                .stream()
+                .map(mapper::toTo)
+                .collect(Collectors.toList());
     }
 }
