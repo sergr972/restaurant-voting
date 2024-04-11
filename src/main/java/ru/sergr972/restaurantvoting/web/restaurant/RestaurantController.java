@@ -35,4 +35,10 @@ public class RestaurantController {
         log.info("Get all restaurants with menu for today");
         return service.getAllWithMenusForToday(now(clock));
     }
+
+    @GetMapping("/win")
+    @ResponseStatus(HttpStatus.OK)
+    public Restaurant getWin() {
+        return service.getWin(now(clock));
+    }
 }

@@ -57,4 +57,9 @@ public class RestaurantService {
     public void update(Restaurant restaurant) {
         repository.save(restaurant);
     }
+
+    @Transactional(readOnly = true)
+    public Restaurant getWin(LocalDate date) {
+        return repository.getByIdWithMenuDay(date, repository.getTop(date).getId());
+    }
 }
