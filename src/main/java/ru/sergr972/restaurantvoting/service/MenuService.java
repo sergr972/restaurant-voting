@@ -11,6 +11,7 @@ import ru.sergr972.restaurantvoting.repository.MenuRepository;
 import ru.sergr972.restaurantvoting.to.MenuTo;
 
 import java.time.Clock;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +32,9 @@ public class MenuService {
     }
 
     @Transactional(readOnly = true)
-    public List<MenuTo> getLast(int restaurantId) {
-        return get(repository.findMenuItemsByRestaurantIdAndDate(restaurantId, now(clock)));
+    public List<MenuTo> getByDate(int restaurantId, LocalDate date) {
+        LocalDate localDate = date == null ? now(clock) : date;
+        return get(repository.findMenuItemsByRestaurantIdAndDate(restaurantId, localDate));
     }
 
     @Transactional(readOnly = true)

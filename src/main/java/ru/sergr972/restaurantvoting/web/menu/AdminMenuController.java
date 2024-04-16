@@ -1,19 +1,24 @@
 package ru.sergr972.restaurantvoting.web.menu;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.sergr972.restaurantvoting.service.MenuService;
 import ru.sergr972.restaurantvoting.to.MenuTo;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static ru.sergr972.restaurantvoting.web.RestValidation.assureIdConsistent;
 import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
 
@@ -34,11 +39,12 @@ public class AdminMenuController {
         return menuService.getAll(restaurantId);
     }
 
-    @GetMapping("/restaurants/{restaurantId}/today")
+    @GetMapping("/restaurants/{restaurantId}/by-date")
+    @Operation(description = "Get menu item for date. Default date - today.")
     @ResponseStatus(HttpStatus.OK)
-    public List<MenuTo> getForRestaurantByToday(@PathVariable int restaurantId) {
-        log.info("get all MenuItems for restaurant {} by today", restaurantId);
-        return menuService.getLast(restaurantId);
+    public List<MenuTo> getForRestaurantByDate(@PathVariable int restaurantId, @DateTimeFormat(iso = DATE) @RequestParam @Nullable LocalDate date) {
+        log.info("get all MenuItems for restaurant {} by date {}", restaurantId, date);
+        return menuService.getByDate(restaurantId, date);
     }
 
     @GetMapping("/{id}")
