@@ -44,8 +44,8 @@ class AdminMenuControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getForRestaurantByToday() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/restaurants/1/today"))
+    void getForRestaurantByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/restaurants/1/by-date"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MENU_TO_MATCHER.contentJson(M2_TO, M3_TO

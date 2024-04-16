@@ -3,7 +3,6 @@ package ru.sergr972.restaurantvoting.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -17,9 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 //https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing-spring-boot-applications-testing-with-mock-environment
 public abstract class AbstractControllerTest {
-
-    @Autowired
-    CacheManager cacheManager;
 
     @Autowired
     private MockMvc mockMvc;

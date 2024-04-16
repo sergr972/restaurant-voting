@@ -51,8 +51,8 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void getLastForUser() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/last-user-vote"))
+    void getForUserByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/by-date"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -61,8 +61,8 @@ class VoteControllerTest extends AbstractControllerTest {
 
 @Test
     @WithUserDetails(value = USER_MAIL)
-    void getLastNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/last-user-vote"))
+    void getForUserByDateNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/by-date"))
                 .andExpect(status().isNotFound());
     }
 
