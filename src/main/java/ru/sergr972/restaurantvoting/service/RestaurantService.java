@@ -5,26 +5,39 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sergr972.restaurantvoting.error.NotFoundException;
 import ru.sergr972.restaurantvoting.mapper.RestaurantMapper;
 import ru.sergr972.restaurantvoting.model.Restaurant;
 import ru.sergr972.restaurantvoting.repository.RestaurantRepository;
 import ru.sergr972.restaurantvoting.to.RestaurantTo;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.time.LocalDate.now;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class RestaurantService {
 
+    private final Clock clock;
     private final RestaurantMapper mapper;
     private final RestaurantRepository repository;
 
     @Transactional(readOnly = true)
-    public List<Restaurant> getAllWithMenusForToday(LocalDate date) {
-        return repository.getAllWithMenuDay(date);
+    public List<Restaurant> getAllWithMenuForDate(LocalDate date) {
+        LocalDate localDate = date == null ? now(clock) : date;
+        return repository.getAllWithMenuDay(localDate);
+    }
+
+    @Transactional(readOnly = true)
+    public Restaurant getByIdWithMenuForDate(Integer id, LocalDate date) {
+        LocalDate localDate = date == null ? now(clock) : date;
+        return repository.getByIdWithMenuDay(id, localDate)
+                .orElseThrow(() -> new NotFoundException("Restaurant " + id + " not have menu item"));
     }
 
     @Transactional(readOnly = true)
