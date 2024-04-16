@@ -14,6 +14,4 @@ public interface VoteRepository extends BaseRepository<Vote> {
     List<Vote> getAllVotesByUser(User user);
 
     Optional<Vote> getVoteByUserAndVoteDate(User user, LocalDate voteDate);
-
-    List<Vote> findAllByVoteDate(LocalDate date);
 }

@@ -13,6 +13,7 @@ import ru.sergr972.restaurantvoting.repository.VoteRepository;
 import ru.sergr972.restaurantvoting.to.VoteTo;
 
 import java.time.Clock;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,8 +35,9 @@ public class VoteService {
     }
 
     @Transactional(readOnly = true)
-    public VoteTo getLast(User user) {
-        return mapper.toTo(getVote(user));
+    public VoteTo getByDate(User user, LocalDate date) {
+        LocalDate voteDate = date == null ? LocalDate.now(clock) : date;
+        return mapper.toTo(getVote(user, voteDate));
     }
 
     @Transactional
@@ -46,18 +48,13 @@ public class VoteService {
 
     @Transactional
     public void update(int restaurantId, User user) {
-        Vote vote = getVote(user);
+        Vote vote = getVote(user, now(clock));
         vote.setRestaurant(restaurantRepository.getExisted(restaurantId));
         voteRepository.save(vote);
     }
 
-    @Transactional
-    public List<VoteTo> getAllForToday() {
-        return get(voteRepository.findAllByVoteDate(now(clock)));
-    }
-
-    private Vote getVote(User user) {
-        return voteRepository.getVoteByUserAndVoteDate(user, now(clock))
+    private Vote getVote(User user, LocalDate voteDate) {
+        return voteRepository.getVoteByUserAndVoteDate(user, voteDate)
                 .orElseThrow(() -> new NotFoundException("User " + user + " not voted"));
     }
 
