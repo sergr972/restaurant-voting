@@ -2,7 +2,9 @@ package ru.sergr972.restaurantvoting.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sergr972.restaurantvoting.error.NotFoundException;
@@ -28,16 +30,23 @@ public class RestaurantService {
     private final RestaurantRepository repository;
 
     @Transactional(readOnly = true)
-    public List<Restaurant> getAllWithMenuForDate(LocalDate date) {
-        LocalDate localDate = date == null ? now(clock) : date;
-        return repository.getAllWithMenuDay(localDate);
+    public List<Restaurant> getAll(LocalDate date, Boolean menu) {
+        if (menu) {
+            LocalDate localDate = date == null ? now(clock) : date;
+            log.info("Get all restaurants with menu for date {}", localDate);
+            return repository.getAllWithMenuDay(localDate);
+        } else {
+            log.info("Get all restaurants without menu");
+            return repository.findAll();
+        }
     }
 
     @Transactional(readOnly = true)
-    public Restaurant getByIdWithMenuForDate(Integer id, LocalDate date) {
+    public Restaurant getByIdWithMenuForDate(Integer restaurantId, LocalDate date) {
         LocalDate localDate = date == null ? now(clock) : date;
-        return repository.getByIdWithMenuDay(id, localDate)
-                .orElseThrow(() -> new NotFoundException("Restaurant " + id + " not have menu for date " + date));
+        log.info("get restaurant {} with menu for date {}", restaurantId, localDate);
+        return repository.getByIdWithMenuDay(restaurantId, localDate)
+                .orElseThrow(() -> new NotFoundException("Restaurant " + restaurantId + " not have menu for date " + date));
     }
 
     @Transactional(readOnly = true)

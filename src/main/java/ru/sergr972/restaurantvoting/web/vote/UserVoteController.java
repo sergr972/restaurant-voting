@@ -43,7 +43,7 @@ public class UserVoteController {
     }
 
     @GetMapping(REST_URL + "/by-date")
-    @Operation(description = "Get users vote for date. Enter date in format yyyy-MM-dd. Default date - today.")
+    @Operation(description = "Get users vote for date (default: date=today). Enter date in format yyyy-MM-dd.")
     @ResponseStatus(HttpStatus.OK)
     public VoteTo getByDate(@AuthenticationPrincipal AuthUser authUser, @RequestParam @DateTimeFormat(iso = DATE) @Nullable LocalDate date) {
         log.info("get Vote for User {} by date {}", authUser.getUser(), date);

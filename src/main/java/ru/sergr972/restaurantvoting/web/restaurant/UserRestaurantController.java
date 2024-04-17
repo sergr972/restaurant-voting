@@ -10,7 +10,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import ru.sergr972.restaurantvoting.model.Restaurant;
 import ru.sergr972.restaurantvoting.service.RestaurantService;
-import ru.sergr972.restaurantvoting.to.RestaurantTo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,27 +26,18 @@ public class UserRestaurantController {
 
     private final RestaurantService service;
 
-    @GetMapping("/menu")
-    @Operation(description = "Get all restaurants with menu for date. Enter date in format yyyy-MM-dd. Default date - today.")
+    @GetMapping
+    @Operation(description = "Get all restaurants with menu for date or list without menu (default: with menu, date=today). Enter date in format yyyy-MM-dd. ")
     @ResponseStatus(HttpStatus.OK)
-    public List<Restaurant> getAllWithMenuForDate(@RequestParam @DateTimeFormat(iso = DATE) @Nullable LocalDate date) {
-        log.info("Get all restaurants with menu for date {}", date);
-        return service.getAllWithMenuForDate(date);
+    public List<Restaurant> getAll(@RequestParam(required = false, defaultValue = "true") Boolean withMenu,
+                                   @RequestParam @DateTimeFormat(iso = DATE) @Nullable LocalDate date) {
+        return service.getAll(date, withMenu);
     }
 
-    @GetMapping("/{restaurantId}")
-    @Operation(description = "Get restaurant by id")
+    @GetMapping("/{restaurantId}/menus")
+    @Operation(description = "Get restaurant with menu for date (default: date=today). Enter date in format yyyy-MM-dd.")
     @ResponseStatus(HttpStatus.OK)
-    public RestaurantTo get(@PathVariable Integer restaurantId) {
-        log.info("get restaurant {}", restaurantId);
-        return service.get(restaurantId);
-    }
-
-    @GetMapping("/{restaurantId}/menu")
-    @Operation(description = "Get restaurant with menu for date. Enter date in format yyyy-MM-dd. Default date - today.")
-    @ResponseStatus(HttpStatus.OK)
-    public Restaurant getWithMenuForDate(@PathVariable Integer restaurantId, @RequestParam @DateTimeFormat(iso = DATE) @Nullable LocalDate date) {
-        log.info("get restaurant {} with menu", restaurantId);
+    public Restaurant getByIdWithMenuForDate(@PathVariable Integer restaurantId, @RequestParam @DateTimeFormat(iso = DATE) @Nullable LocalDate date) {
         return service.getByIdWithMenuForDate(restaurantId, date);
     }
 }
