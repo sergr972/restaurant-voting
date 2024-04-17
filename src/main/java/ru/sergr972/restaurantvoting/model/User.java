@@ -10,8 +10,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.lang.NonNull;
 import ru.sergr972.restaurantvoting.HasIdAndEmail;
 import ru.sergr972.restaurantvoting.validation.NoHtml;
@@ -19,7 +17,6 @@ import ru.sergr972.restaurantvoting.validation.NoHtml;
 import java.util.*;
 
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "users")
 @Getter
 @Setter
@@ -54,7 +51,6 @@ public class User extends NamedEntity implements HasIdAndEmail {
             uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role"}, name = "uk_user_role"))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Role> roles = EnumSet.noneOf(Role.class);
 
     public User(User u) {

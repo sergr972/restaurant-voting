@@ -23,6 +23,7 @@ import static java.time.LocalDate.now;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "menu")
 public class RestaurantService {
 
     private final Clock clock;
@@ -30,6 +31,7 @@ public class RestaurantService {
     private final RestaurantRepository repository;
 
     @Transactional(readOnly = true)
+    @Cacheable
     public List<Restaurant> getAll(LocalDate date, Boolean menu) {
         if (menu) {
             LocalDate localDate = date == null ? now(clock) : date;
@@ -42,6 +44,7 @@ public class RestaurantService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable
     public Restaurant getByIdWithMenuForDate(Integer restaurantId, LocalDate date) {
         LocalDate localDate = date == null ? now(clock) : date;
         log.info("get restaurant {} with menu for date {}", restaurantId, localDate);
