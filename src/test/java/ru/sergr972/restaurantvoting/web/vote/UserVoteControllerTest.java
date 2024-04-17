@@ -24,16 +24,16 @@ import static ru.sergr972.restaurantvoting.util.TimeUtil.setTime;
 import static ru.sergr972.restaurantvoting.web.data.RestaurantTestData.RESTAURANT_ID;
 import static ru.sergr972.restaurantvoting.web.data.UserTestData.*;
 import static ru.sergr972.restaurantvoting.web.data.VoteTestData.*;
-import static ru.sergr972.restaurantvoting.web.vote.VoteController.REST_URL;
+import static ru.sergr972.restaurantvoting.web.vote.UserVoteController.REST_URL;
 
-class VoteControllerTest extends AbstractControllerTest {
+class UserVoteControllerTest extends AbstractControllerTest {
 
     private final Clock clock;
     private final VoteRepository repository;
     private final VoteMapper voteMapper;
 
     @Autowired
-    VoteControllerTest(Clock clock, VoteRepository repository, VoteMapper voteMapper) {
+    UserVoteControllerTest(Clock clock, VoteRepository repository, VoteMapper voteMapper) {
         this.clock = clock;
         this.repository = repository;
         this.voteMapper = voteMapper;

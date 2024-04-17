@@ -37,7 +37,7 @@ public class RestaurantService {
     public Restaurant getByIdWithMenuForDate(Integer id, LocalDate date) {
         LocalDate localDate = date == null ? now(clock) : date;
         return repository.getByIdWithMenuDay(id, localDate)
-                .orElseThrow(() -> new NotFoundException("Restaurant " + id + " not have menu item"));
+                .orElseThrow(() -> new NotFoundException("Restaurant " + id + " not have menu for date " + date));
     }
 
     @Transactional(readOnly = true)

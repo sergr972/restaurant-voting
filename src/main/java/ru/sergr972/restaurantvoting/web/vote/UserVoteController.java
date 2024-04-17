@@ -28,7 +28,7 @@ import static ru.sergr972.restaurantvoting.web.RestValidation.checkNew;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @RequiredArgsConstructor
-public class VoteController {
+public class UserVoteController {
 
     public static final String REST_URL = "/api/votes";
 
@@ -37,15 +37,15 @@ public class VoteController {
     @GetMapping(REST_URL)
     @Operation(description = "Get votes history for user.")
     @ResponseStatus(HttpStatus.OK)
-    public List<VoteTo> getAllForUser(@AuthenticationPrincipal AuthUser authUser) {
+    public List<VoteTo> getAll(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get all Vote for User {}", authUser.getUser());
         return service.get(authUser.getUser());
     }
 
     @GetMapping(REST_URL + "/by-date")
-    @Operation(description = "Get users vote for date. Default date - today.")
+    @Operation(description = "Get users vote for date. Enter date in format yyyy-MM-dd. Default date - today.")
     @ResponseStatus(HttpStatus.OK)
-    public VoteTo getForUserByDate(@AuthenticationPrincipal AuthUser authUser, @DateTimeFormat(iso = DATE) @RequestParam @Nullable LocalDate date) {
+    public VoteTo getByDate(@AuthenticationPrincipal AuthUser authUser, @RequestParam @DateTimeFormat(iso = DATE) @Nullable LocalDate date) {
         log.info("get Vote for User {} by date {}", authUser.getUser(), date);
         return service.getByDate(authUser.getUser(), date);
     }

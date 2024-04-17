@@ -40,9 +40,9 @@ public class AdminMenuController {
     }
 
     @GetMapping("/restaurants/{restaurantId}/by-date")
-    @Operation(description = "Get menu item for date. Default date - today.")
+    @Operation(description = "Get menu item for date. Enter date in format yyyy-MM-dd. Default date - today.")
     @ResponseStatus(HttpStatus.OK)
-    public List<MenuTo> getForRestaurantByDate(@PathVariable int restaurantId, @DateTimeFormat(iso = DATE) @RequestParam @Nullable LocalDate date) {
+    public List<MenuTo> getForRestaurantByDate(@PathVariable int restaurantId, @RequestParam @DateTimeFormat(iso = DATE) @Nullable LocalDate date) {
         log.info("get all MenuItems for restaurant {} by date {}", restaurantId, date);
         return menuService.getByDate(restaurantId, date);
     }

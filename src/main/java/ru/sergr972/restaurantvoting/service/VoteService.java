@@ -36,7 +36,7 @@ public class VoteService {
 
     @Transactional(readOnly = true)
     public VoteTo getByDate(User user, LocalDate date) {
-        LocalDate voteDate = date == null ? LocalDate.now(clock) : date;
+        LocalDate voteDate = date == null ? now(clock) : date;
         return mapper.toTo(getVote(user, voteDate));
     }
 
