@@ -30,7 +30,7 @@ spring:
 logging:
   level:
     root: WARN
-    ru.sergr972: DEBUG
+    ru.sergr972.restaurantvoting: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 server.servlet:
@@ -39,7 +39,6 @@ server.servlet:
     enabled: true # Enable http encoding support
     force: true
 
-springdoc.swagger-ui.path: /swagger-ui
+springdoc.swagger-ui.path: /
 server:
   port: 8082
-  forward-headers-strategy: framework
