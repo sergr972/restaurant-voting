@@ -1,4 +1,4 @@
-package ru.sergr972.restaurantvoting.app.config;
+package ru.sergr972.restaurantvoting.app.error;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;

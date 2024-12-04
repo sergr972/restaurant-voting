@@ -1,0 +1,110 @@
+/*color palettes https://colorhunt.co/palette/b6fffa98e4ff80b3ff687eff */
+:root {
+    --c1: #eafff1;
+    --c2: #98E4FF;
+    --c3: #80B3FF;
+    --c4: #1a3fb9;
+    --c4-50: #2f516e;
+    --bs-border-radius: 1rem;
+    --bs-border-color: var(--c4-50);
+    --bs-body-color: var(--c4);
+}
+
+.c1 {
+    color: var(--c1)
+}
+
+.c2 {
+    color: var(--c2)
+}
+
+.c3 {
+    color: var(--c3)
+}
+
+.c4 {
+    color: var(--c4)
+}
+
+html {
+    height: 100%;
+}
+
+main > .container {
+    padding: 45px 15px;
+}
+
+body {
+    background-color: var(--c1);
+    height: 100%;
+    color: var(--c4);
+    font-family: Montserrat, sans-serif;
+}
+
+/* link https://www.w3schools.com/html/html_links_colors.asp*/
+a:link {
+    color: var(--c3);
+    text-decoration: none;
+}
+
+a:visited {
+    color: var(--c2);
+}
+
+a:hover {
+    color: var(--c4);
+    text-decoration: none;
+}
+
+.link-warning {
+    color: var(--c3) !important;
+}
+
+.link-warning:hover, .link-warning:focus {
+    color: var(--c4) !important;
+}
+
+.nav-link {
+    font-size: 20px;
+}
+
+/* footer */
+footer {
+    background-color: var(--c3);
+}
+
+footer a:link {
+    color: var(--c1);
+    text-decoration: none;
+}
+
+footer a:visited {
+    color: var(--c1);
+}
+
+footer a:hover {
+    color: var(--c2);
+    text-decoration: none;
+}
+
+/* button */
+.btn-outline-warning {
+    --bs-btn-color: var(--c3);
+    --bs-btn-border-color: var(--c3);
+    --bs-btn-hover-color: var(--c4);
+    --bs-btn-hover-bg: var(--c1);
+    --bs-btn-hover-border-color: var(--c4);
+    --bs-btn-active-color: 0;
+    --bs-btn-active-bg: var(--c2);
+    --bs-btn-active-border-color: var(--c4);
+}
+
+/* card */
+.card {
+    --bs-card-border-color: var(--c4-50);
+}
+
+.fit {
+    height: auto;
+    max-width: 50%;
+}
