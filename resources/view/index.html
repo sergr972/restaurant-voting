@@ -1,86 +1,17 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="title" content="Выпускной проект по курсу Topjava"/>
-    <meta name="description" content="Курс Topjava"/>
-    <title>Выпускной проект по курсу Topjava</title>
-<!--    <link rel="shortcut icon" href="/static/img/logo.png"/>-->
-<!--    <link rel="apple-touch-icon" href="/static/img/logo.png">-->
-    <link rel="image_src" href="/static/img/title/topjava.png"/>
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"/>
-    <!--        https://fontawesome.com/download        -->
-    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css"/>
-    <link rel="stylesheet" href="/static/css/main.css?v=1"/>
-    <meta name="keywords" content="Выпускной проект по курсу Topjava (Голосование за ресторан): REST API с использованием Spring-Boot/Spring Data JPA без внешнего интерфейса ">
-</head>
-<body class="d-flex flex-column">
-<!--    https://getbootstrap.com/docs/5.3/examples/headers/    -->
-<nav class="pt-1 border-bottom">
-    <div class="container d-flex flex-wrap">
-        <ul class="nav me-auto">
-<!--            <li class="nav-item me-2 pt-1">-->
-<!--                <a href="/"><img src="/static/img/logo.png"></a>-->
-<!--            </li>-->
-            <li class="nav-item"><a href="https://sergru.ru/resumes" class="nav-link link-warning">BaseJava Demo</a></li>
-            <li class="nav-item"><a href="https://sergru.ru/topjava" class="ps-0 nav-link link-warning">TopJava Demo</a></li>
-        </ul>
-    </div>
-</nav>
-<main>
-    <div class="container">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<th:block th:replace="~{layout/main::page(title='Выпускной проект по курсу Topjava', appMain=~{::main},
+descr='Выпускной проект по курсу Topjava: Голосование за рестораны: REST API с использованием Spring-Boot/Spring Data JPA без внешнего интерфейса')}">
+    <main>
         <div class="text-center">
-            <h2>Голосование за рестораны
-            </h2>
+            <h3>Голосование за рестораны<br>
+                Выпускной проект по <a href="https://javaops.ru/view/topjava" title="_blank" class="c4">курсу Topjava</a>
+            </h3>
             <img src="/static/img/title/topjava.png" class="p-1 my-4 border rounded fit">
             <h5><a href="/swagger-ui">REST API documentation</a><br>
                 <a href='/logout'>Выход</a>
             </h5>
         </div>
-    </div>
-</main>
-<footer class="footer mt-auto py-2">
-    <div class="container">
-        <div>Выпускной проект по курсу <a href="https://javaops.ru/view/topjava" title="_blank" class="c4">Topjava</a></div>
-        <div class="row">
-            <div class="col-6 my-2">
-                <span>Контакты</span>:
-                <a href="https://t.me/SerGru72" class="m-1">
-                    <i class="fa-brands fa-telegram fa-lg"></i>
-                </a>
-                <a href="https://wa.me/79119321332" class="m-1">
-                    <i class="fa-brands fa-whatsapp fa-lg"></i>
-                </a>
-                <a href="skype:gruzdev72?chat" class="m-1">
-                    <i class="fa-brands fa-skype fa-lg"></i>
-                </a>
-                <a href="https://vk.com/gruzdev.sergey" class="m-1">
-                    <i class="fa-brands fa-vk fa-lg"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/sergru" class="m-1">
-                    <i class="fa-brands fa-linkedin fa-lg"></i>
-                </a>
-            </div>
-            <div class="col-6 my-2 text-end">
-                <!--  https://yandex.ru/dev/share  -->
-                <style>
-                    /* https://lospirata.ru/blog/webdev/blok-podelitsya-ot-yandeks-nestandartnaya-nastrojka/ */
-                    .ya-share2__list::before {
-                        content: 'Поделиться \203A ';
-                        position: relative;
-                        top: 5px;
-                        font-size: 16px;
-                        margin-right: 6px;
-                        color: var(--c4);
-                    }
-                </style>
-                <script src="https://yastatic.net/share2/share.js"></script>
-                <div class="ya-share2" data-curtain data-shape="round" data-color-scheme="whiteblack"
-                     data-services="vkontakte,telegram,whatsapp,skype,linkedin"></div>
-            </div>
-        </div>
-    </div>
-</footer>
-</body>
+    </main>
+</th:block>
 </html>
