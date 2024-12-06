@@ -2,6 +2,8 @@ package ru.sergr972.restaurantvoting.common.error;
 
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
+
 public enum ErrorType {
     APP_ERROR("Application error", HttpStatus.INTERNAL_SERVER_ERROR),
     BAD_DATA("Wrong data", HttpStatus.UNPROCESSABLE_ENTITY),
@@ -19,4 +21,9 @@ public enum ErrorType {
         this.title = title;
         this.status = status;
     }
+
+    public static ErrorType of(HttpStatus status) {
+        return Arrays.stream(values()).filter(et -> et.status == status).findAny().orElse(APP_ERROR);
+    }
+
 }
